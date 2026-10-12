@@ -8,13 +8,13 @@ vector<int> h;
 vector<int> w;
 int nh, nw;
 bool check(int n){
-    if(nw==0) return true;
+    if(nw==0) return true; // 處理可能有0個海報的狀況
     int iw = 0;
     int temp = w[iw];
     for(int i=0;i<nh;i++){
         if(h[i]>=n){
             temp--;
-            if(temp<=0){
+            if(temp<=0){ // 可能有海報寬度為0
                 if(iw==nw-1) break;
                 else{
                     iw++;
