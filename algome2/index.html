@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>演算法 Midterm 2 程式題互動教學</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0f14; --bg2:#12151c; --panel:#171b24; --panel2:#1d2230; --line:#272d3b; --line2:#343c4f;
+  --text:#dfe3ec; --dim:#8b93a7; --faint:#5b6377;
+  --acc:#7aa2f7; --acc2:#bb9af7; --ok:#9ece6a; --bad:#f7768e; --warn:#e0af68; --cyan:#7dcfff; --orange:#ff9e64;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sans:"Noto Sans TC",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.7}
+a{color:var(--acc)}
+code,kbd,.mono{font-family:var(--mono);font-size:.92em}
+code{background:#222838;padding:1px 6px;border-radius:5px;color:#c0caf5}
+.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+nav.side{position:sticky;top:0;height:100vh;overflow:auto;background:var(--bg2);border-right:1px solid var(--line);padding:22px 14px}
+.brand{font-weight:700;font-size:16px;letter-spacing:.3px;margin:0 6px 4px}
+.brand small{display:block;color:var(--dim);font-weight:400;font-size:12px}
+.navlist{list-style:none;padding:0;margin:18px 0 0}
+.navlist a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:var(--text);text-decoration:none;font-size:14px}
+.navlist a:hover{background:var(--panel)}
+.navlist a.active{background:var(--panel2);box-shadow:inset 3px 0 0 var(--acc)}
+.letter{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:6px;background:#232a3a;font-family:var(--mono);font-weight:600;font-size:12px;color:var(--acc);flex:none}
+.navlist .tag{margin-left:auto;font-size:11px;color:var(--faint)}
+.navsep{height:1px;background:var(--line);margin:12px 6px}
+main{padding:34px clamp(16px,4vw,56px) 80px;max-width:1180px;width:100%}
+.view{display:none}
+.view.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h1{font-size:26px;margin:0 0 6px}
+h2{font-size:19px;margin:28px 0 10px}
+h3{font-size:16px;margin:20px 0 8px;color:#c9d1e3}
+p{margin:8px 0}
+.sub{color:var(--dim);margin-bottom:18px}
+.pill{display:inline-block;font-size:12px;padding:2px 9px;border-radius:99px;background:#232a3a;color:var(--dim);margin-right:6px;border:1px solid var(--line)}
+.pill.ok{color:var(--ok);border-color:#3b4a2c}
+.pill.warn{color:var(--warn);border-color:#4d3f27}
+.pill.acc{color:var(--acc);border-color:#2e3d63}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.ovcard{cursor:pointer;transition:border-color .15s,transform .15s}
+.ovcard:hover{border-color:var(--line2);transform:translateY(-2px)}
+.ovcard h3{margin:4px 0 6px;display:flex;gap:10px;align-items:center}
+.note{border-left:3px solid var(--acc);background:#151b2a;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.note.warn{border-color:var(--warn);background:#1e1a12}
+.note.ok{border-color:var(--ok);background:#141c12}
+.note.bad{border-color:var(--bad);background:#1f1418}
+ul.clean{padding-left:20px;margin:6px 0}
+ul.clean li{margin:3px 0}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:18px 0 18px;overflow-x:auto}
+.tabs button{background:none;border:0;color:var(--dim);font:inherit;font-size:14px;padding:9px 14px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button:hover{color:var(--text)}
+.tabs button.on{color:var(--text);border-bottom-color:var(--acc)}
+.pane{display:none}.pane.on{display:block}
+details.spoil{background:var(--panel);border:1px dashed var(--line2);border-radius:10px;padding:12px 16px}
+details.spoil summary{cursor:pointer;color:var(--warn);font-weight:500}
+pre.io{background:#0b0d12;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:6px 0;font-family:var(--mono);font-size:13px;line-height:1.5;overflow:auto;white-space:pre}
+.iogrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.iogrid h4{margin:0;font-size:12px;color:var(--dim);font-weight:500}
+table.t{border-collapse:collapse;width:100%;font-size:14px}
+table.t th,table.t td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left}
+table.t th{color:var(--dim);font-weight:500;font-size:13px}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.ctrl label{color:var(--dim);font-size:13px;display:flex;align-items:center;gap:6px}
+button.b,select.b,input.b{background:#222838;border:1px solid var(--line2);color:var(--text);border-radius:8px;padding:6px 12px;font:inherit;font-size:13px}
+button.b{cursor:pointer}
+button.b:hover{background:#2a3144}
+button.b.pri{background:#2c3d66;border-color:#3d5390}
+button.b.pri:hover{background:#34487a}
+input.b{width:90px}
+input.b.wide{width:100%;max-width:520px;font-family:var(--mono)}
+textarea.b{background:#0b0d12;border:1px solid var(--line2);color:var(--text);border-radius:8px;padding:8px 10px;font-family:var(--mono);font-size:13px;width:100%;min-height:60px}
+.stat{display:inline-flex;flex-direction:column;background:#11141c;border:1px solid var(--line);border-radius:10px;padding:8px 14px;min-width:110px}
+.stat b{font-size:22px;font-family:var(--mono)}
+.stat span{font-size:12px;color:var(--dim)}
+.yes{color:var(--ok)} .no{color:var(--bad)}
+/* code viewer */
+.codewrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+.code{background:#0b0d12;border:1px solid var(--line);border-radius:10px;overflow:auto;font-family:var(--mono);font-size:13px;line-height:1.62;padding:8px 0;max-height:640px}
+.code .ln{display:flex;cursor:pointer;padding:0 12px 0 0;white-space:pre}
+.code .ln:hover{background:#151a26}
+.code .ln.has .no{color:#6d7aa0}
+.code .ln.has .no::before{content:"●";color:#3d5390;font-size:8px;margin-right:4px;vertical-align:middle}
+.code .ln.sel{background:#1b2338}
+.code .ln.sel .no{color:var(--acc)}
+.code .no{width:52px;flex:none;text-align:right;padding-right:14px;color:#3e4558;user-select:none}
+.kw{color:#bb9af7}.ty{color:#2ac3de}.st{color:#9ece6a}.cm{color:#5f6a86;font-style:italic}.nu{color:#ff9e64}.pp{color:#7dcfff}
+.explain{position:sticky;top:20px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-height:160px}
+.explain .lnr{font-family:var(--mono);font-size:12px;color:var(--acc)}
+.explain .hint{color:var(--faint);font-size:13px}
+.navbtns{display:flex;gap:6px;margin-top:12px}
+/* quiz */
+.q{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0}
+.q .opts{display:grid;gap:6px;margin-top:8px}
+.q button.opt{text-align:left;background:#141822;border:1px solid var(--line2);color:var(--text);border-radius:8px;padding:8px 12px;font:inherit;font-size:14px;cursor:pointer}
+.q button.opt:hover{border-color:#4a5574}
+.q button.opt.right{border-color:var(--ok);background:#16210f}
+.q button.opt.wrong{border-color:var(--bad);background:#22141a}
+.q .why{display:none;margin-top:10px;font-size:14px;color:#c3c9d8}
+.q.done .why{display:block}
+/* A grid */
+.seatgrid{display:inline-grid;gap:3px;background:#0b0d12;padding:8px;border-radius:10px;border:1px solid var(--line)}
+.seat{width:34px;height:34px;border-radius:6px;display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:14px;border:1px solid #2a3142;background:#161a24;color:var(--faint);cursor:pointer;user-select:none;transition:background .12s}
+.seat.v{background:#4a1d2a;border-color:#a33e57;color:#ffb3c1}
+.seat.d1{background:#4a2f17;border-color:#9a5d26;color:#ffcf9e}
+.seat.d2{background:#3d3a17;border-color:#807625;color:#f2e39c}
+.seat.hl{outline:2px solid var(--cyan);outline-offset:1px}
+.seat.ro{cursor:default}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--dim);margin:6px 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+/* B ring */
+.ringbox{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:16px;align-items:start}
+.log{background:#0b0d12;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-family:var(--mono);font-size:12.5px;height:210px;overflow:auto;line-height:1.55}
+.log div.cur{color:var(--text)} .log div{color:var(--dim)}
+.sols{font-family:var(--mono);font-size:13px;max-height:180px;overflow:auto;background:#0b0d12;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+/* C bars */
+.bars{display:flex;align-items:flex-end;gap:6px;height:190px;padding:10px 8px 0;border-bottom:1px solid var(--line2);overflow-x:auto}
+.bar{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:30px}
+.bar .col{width:24px;border-radius:5px 5px 0 0;background:#2b3245;transition:height .25s}
+.bar.p .col{background:linear-gradient(#9ece6a,#5f8a3a)}
+.bar .cnt{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.bar.p .cnt{color:var(--ok)}
+.barlbl{display:flex;gap:6px;padding:4px 8px 0;overflow-x:auto}
+.barlbl span{min-width:30px;text-align:center;font-family:var(--mono);font-size:13px}
+.barlbl span small{display:block;color:var(--faint);font-size:10px}
+/* D sieve */
+.sieve{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:430px}
+.sieve div{aspect-ratio:1;display:grid;place-items:center;border-radius:5px;font-family:var(--mono);font-size:12px;background:#1a1f2c;color:var(--text);transition:all .2s}
+.sieve div.x{background:#121520;color:#3a4152;text-decoration:line-through}
+.sieve div.p{background:#1f3320;color:var(--ok);font-weight:600}
+.sieve div.cur{background:#2c3d66;color:#fff;outline:2px solid var(--acc)}
+.sieve div.hit{background:#4a1d2a;color:#ffb3c1}
+tr.found td{color:var(--ok);font-weight:600}
+/* F timeline */
+.tl{width:100%;overflow-x:auto}
+.evlist{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
+.ev{font-family:var(--mono);font-size:12px;padding:3px 8px;border-radius:6px;background:#1a1f2c;border:1px solid var(--line2);color:var(--dim)}
+.ev.s{color:var(--cyan)} .ev.e{color:var(--orange)}
+.ev.cur{background:#2c3d66;color:#fff;border-color:var(--acc)}
+.ev.past{opacity:.5}
+/* G chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.chip{font-family:var(--mono);padding:5px 10px;border-radius:8px;border:1px solid var(--line2);background:#161a24;font-size:15px}
+.chip.plus{border-color:#3b5a2c;color:var(--ok)}
+.chip.minus{border-color:#6a2c3a;color:var(--bad)}
+.chip sub{font-size:10px;color:var(--faint);margin-left:4px}
+.digits{font-family:var(--mono);font-size:18px;letter-spacing:1px;word-break:break-all}
+.digits span.g0{color:var(--ok)} .digits span.g1{color:var(--bad)}
+.kbdstep{counter-reset:s;list-style:none;padding:0}
+.kbdstep li{counter-increment:s;position:relative;padding-left:34px;margin:8px 0}
+.kbdstep li::before{content:counter(s);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:50%;background:#232a3a;color:var(--acc);font-family:var(--mono);font-size:12px;display:grid;place-items:center}
+.mathbox{font-family:var(--mono);background:#0b0d12;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0;color:#c0caf5;overflow-x:auto;white-space:pre}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  nav.side{position:sticky;top:0;height:auto;z-index:5;padding:10px;border-right:0;border-bottom:1px solid var(--line)}
+  .brand{display:none}
+  .navlist{display:flex;gap:4px;overflow-x:auto;margin:0}
+  .navlist a{white-space:nowrap;padding:6px 10px}
+  .navlist .tag,.navsep{display:none}
+  .codewrap,.ringbox,.iogrid{grid-template-columns:1fr}
+  .explain{position:static}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<nav class="side">
+  <div class="brand">Midterm 2 程式題<small>UTCS 114-1 Algorithms · 互動教學</small></div>
+  <ul class="navlist" id="nav">
+    <li><a href="#overview" data-v="overview"><span class="letter">★</span>總覽<span class="tag"></span></a></li>
+    <li class="navsep"></li>
+    <li><a href="#prob-a" data-v="prob-a"><span class="letter">A</span>Quarantine Policy<span class="tag">模擬</span></a></li>
+    <li><a href="#prob-b" data-v="prob-b"><span class="letter">B</span>Number Ring<span class="tag">回溯</span></a></li>
+    <li><a href="#prob-c" data-v="prob-c"><span class="letter">C</span>Counting the Primes<span class="tag">計數</span></a></li>
+    <li><a href="#prob-d" data-v="prob-d"><span class="letter">D</span>Goldbach and Euler<span class="tag">篩法</span></a></li>
+    <li><a href="#prob-e" data-v="prob-e"><span class="letter">E</span>Falling in Love<span class="tag">DP</span></a></li>
+    <li><a href="#prob-f" data-v="prob-f"><span class="letter">F</span>Equipments of Kitchen<span class="tag">掃描線</span></a></li>
+    <li><a href="#prob-g" data-v="prob-g"><span class="letter">G</span>Counterfeit Money<span class="tag">大數</span></a></li>
+    <li class="navsep"></li>
+    <li><a href="#cheatsheet" data-v="cheatsheet"><span class="letter">⌘</span>考前速查表<span class="tag"></span></a></li>
+    <li><a href="https://github.com/uuymaion/algorithm_cpp/tree/main/algome2" target="_blank" rel="noopener"><span class="letter">⎇</span>GitHub 原始碼<span class="tag"></span></a></li>
+  </ul>
+</nav>
+<main>
+
+<!-- ============ OVERVIEW ============ -->
+<section class="view" id="v-overview">
+  <h1>演算法 Midterm 2 程式題互動教學</h1>
+  <p class="sub">七題，每題都有：題目重點、互動演示、解法拆解、你寫的程式碼（逐行解說）、小測驗。點左邊的題目開始</p>
+
+  <div class="note ok"><b>先講結論：</b>你寫好的 6 份程式（A、B、C、D、F、G）我都編譯起來，用題目給的範例測資跑過，<b>輸出全部正確</b>。E 題（Falling in Love）你還沒寫，E 頁面的參考解<b>預設收起來</b>，想自己先寫就先不要點開</div>
+
+  <h2>題目一覽</h2>
+  <div class="grid2" id="ovcards"></div>
+
+  <h2>建議的複習順序</h2>
+  <ol class="kbdstep">
+    <li><b>C → G → A</b>：純模擬題，暖身用。重點是「怎麼存資料、怎麼照規則算」</li>
+    <li><b>D</b>：埃氏篩法 + 一點數學（奇偶性）。篩法是常考工具，順便練熟</li>
+    <li><b>F</b>：掃描線（sweep line）。學會「把區間拆成事件、排序、掃過去」這個套路</li>
+    <li><b>B</b>：回溯（backtracking）。DFS 選數字 → 遞迴 → 撤銷，這是期中範圍 Chapter 5 的主角</li>
+    <li><b>E</b>：格子路徑 DP。dp[i][j] = 上 + 左，有障礙就歸零</li>
+  </ol>
+
+  <div class="note">每一題的「你的程式碼」分頁：<b>點任何一行</b>，右邊就會說明那一行在做什麼。有標小圓點 ● 的行代表有解說，可以用「上一段／下一段」按鈕逐段看</div>
+</section>
+
+<!-- ============ A ============ -->
+<section class="view" id="v-prob-a">
+  <span class="pill acc">Problem A</span><span class="pill">模擬</span><span class="pill ok">你的程式：範例通過</span>
+  <h1>Quarantine Policy（隔離政策）</h1>
+  <p class="sub">飛機座位圖上有確診者 V，周圍 8 格要隔離：上下左右 d1 天、斜對角 d2 天，多個來源取最大值不累加</p>
+  <div class="tabs" data-for="a"></div>
+
+  <div class="pane" data-p="a-1">
+    <h2>題目重點</h2>
+    <ul class="clean">
+      <li>輸入 t 架飛機；每架給 <code>n m d1 d2</code>，接著 n 行、每行 m 個字元（<code>.</code> 健康、<code>V</code> 確診）</li>
+      <li><b>直接相鄰</b>（前、後、左、右）→ 隔離 d1 天</li>
+      <li><b>斜角相鄰</b>（左前、右前、左後、右後）→ 隔離 d2 天</li>
+      <li>被好幾個 V 影響時<b>不累加</b>，取<b>最大值</b></li>
+      <li>輸出 <code>Airplane #z:</code>，再把每個 <code>.</code> 換成隔離天數（沒被影響就是 0），V 保持 V</li>
+      <li>範圍：<code>1 ≤ d2 ≤ d1 &lt; 10</code>，所以天數一定是<b>個位數</b>，輸出不用加空格</li>
+    </ul>
+    <h3>範例</h3>
+    <div class="iogrid">
+      <div><h4>Input</h4><pre class="io">2
+4 4 7 3
+.V..
+....
+..V.
+....
+2 2 1 1
+V.
+..</pre></div>
+      <div><h4>Output</h4><pre class="io">Airplane #1:
+7V70
+3773
+07V7
+0373
+Airplane #2:
+V1
+11</pre></div>
+    </div>
+    <div class="note">看第 2 行第 2 格（<code>7</code>）：它在第一個 V 的正下方（d1=7），同時也在第二個 V 的左上斜角（d2=3）。取 max → 7，不是 7+3</div>
+  </div>
+
+  <div class="pane" data-p="a-2">
+    <h2>互動演示：點格子放置／移除 V</h2>
+    <div class="ctrl">
+      <label>n <select class="b" id="a-n"></select></label>
+      <label>m <select class="b" id="a-m"></select></label>
+      <label>d1 <select class="b" id="a-d1"></select></label>
+      <label>d2 <select class="b" id="a-d2"></select></label>
+      <button class="b" id="a-s1">載入範例 1</button>
+      <button class="b" id="a-rand">隨機</button>
+      <button class="b" id="a-clear">清空</button>
+    </div>
+    <div class="legend"><span><i style="background:#4a1d2a"></i>V 確診</span><span><i style="background:#4a2f17"></i>直接相鄰 d1</span><span><i style="background:#3d3a17"></i>斜角 d2</span><span>把滑鼠移到右邊的格子上，會框出影響它的 V</span></div>
+    <div class="grid2" style="align-items:start">
+      <div><h3>輸入（點我編輯）</h3><div id="a-in" class="seatgrid"></div></div>
+      <div><h3>輸出（隔離天數）</h3><div id="a-out" class="seatgrid"></div><p id="a-why" class="hint" style="color:var(--dim);font-size:13px;min-height:44px"></p></div>
+    </div>
+    <h3>程式實際會印出的文字</h3>
+    <pre class="io" id="a-text"></pre>
+  </div>
+
+  <div class="pane" data-p="a-3">
+    <h2>解法拆解</h2>
+    <p>這題沒有任何演算法技巧，就是<b>照規則把資料填進二維陣列</b>。兩種常見寫法：</p>
+    <h3>寫法 1：從 V 往外「推」（你用的）</h3>
+    <p>讀到一個 V，就把它周圍 8 格更新成 <code>max(原值, d1 或 d2)</code></p>
+    <h3>寫法 2：從每個格子往外「拉」</h3>
+    <p>對每個 <code>.</code>，看它周圍 8 格有沒有 V，有就取最大值。兩種都是 O(n·m)</p>
+    <h3>用方向陣列讓程式更短</h3>
+    <p>你的寫法把 8 個方向一個一個寫出來，邊界判斷要寫很多次，容易打錯。考試常用的技巧是<b>方向陣列</b>：</p>
+    <pre class="io">int dx[8] = {-1, 1, 0, 0, -1, -1, 1, 1};
+int dy[8] = { 0, 0,-1, 1, -1,  1,-1, 1};
+// 前 4 個是上下左右（d1），後 4 個是斜角（d2）
+for (int k = 0; k &lt; 8; k++) {
+    int x = i + dx[k], y = j + dy[k];
+    if (x &lt; 0 || x &gt;= n || y &lt; 0 || y &gt;= m) continue;   // 出界
+    int d = (k &lt; 4) ? d1 : d2;
+    day[x][y] = max(day[x][y], d);
+}</pre>
+    <h3>一個小陷阱：V 要怎麼記？</h3>
+    <p>如果你用同一個 int 陣列同時存「天數」和「是不是 V」，要找一個<b>不可能是天數</b>的值當 V 的記號。你用了 <code>d1 + d2</code>：因為 <code>d2 ≥ 1</code>，所以 <code>d1 + d2 &gt; d1 ≥ 任何天數</code>，不會撞到，很聰明。更直白的做法是另外留一個 <code>char</code> 陣列存原始座位圖，輸出時看原圖是不是 V</p>
+    <div class="note">複雜度：每架飛機 O(n·m)，最多 1000 架 × 100×100 = 10⁷，輕鬆過</div>
+  </div>
+
+  <div class="pane" data-p="a-4">
+    <h2>你的程式碼 <span class="pill">algome2_a.cpp</span></h2>
+    <div class="codewrap" data-code="A"></div>
+  </div>
+
+  <div class="pane" data-p="a-5"><h2>小測驗</h2><div data-quiz="A"></div></div>
+</section>
+
+<!-- ============ B ============ -->
+<section class="view" id="v-prob-b">
+  <span class="pill acc">Problem B</span><span class="pill">回溯 Backtracking</span><span class="pill ok">你的程式：範例通過</span>
+  <h1>Bidirectional Number Ring（質數環）</h1>
+  <p class="sub">把 1~N 放進 N 個圍成一圈的圓，相鄰兩數的和都要是質數，第一格固定是 1，輸出全部排法</p>
+  <div class="tabs" data-for="b"></div>
+
+  <div class="pane" data-p="b-1">
+    <h2>題目重點</h2>
+    <ul class="clean">
+      <li>多筆測資，每筆一個 N（2 ≤ N ≤ 16）</li>
+      <li>1~N 每個數用一次，排成一個<b>環</b>：相鄰兩數和是質數，<b>最後一個和第一個也算相鄰</b></li>
+      <li>第一格一定是 1</li>
+      <li>輸出 <code>Case k:</code>，然後每個排法一行；兩個 Case 之間空一行</li>
+      <li>題目說「順時針一行、逆時針一行」，其實就是：一個環順著讀和倒著讀都是合法答案，而且<b>按字典序列出所有答案</b>時，它們本來就都會出現</li>
+    </ul>
+    <h3>範例</h3>
+    <div class="iogrid">
+      <div><h4>Input</h4><pre class="io">6
+8</pre></div>
+      <div><h4>Output</h4><pre class="io">Case 1:
+1 4 3 2 5 6
+1 6 5 2 3 4
+
+Case 2:
+1 2 3 8 5 6 7 4
+1 2 5 8 3 4 7 6
+1 4 7 6 5 8 3 2
+1 6 7 4 3 8 5 2</pre></div>
+    </div>
+    <div class="note">觀察：<code>1 4 3 2 5 6</code> 倒過來讀（從 1 開始往另一個方向）就是 <code>1 6 5 2 3 4</code>。所以「順、逆時針」只是解釋為什麼答案成對出現，程式只要按字典序 DFS 把所有解印出來就對了</div>
+  </div>
+
+  <div class="pane" data-p="b-2">
+    <h2>互動演示：一步一步看 DFS 回溯</h2>
+    <div class="ctrl">
+      <label>N <select class="b" id="b-n"></select></label>
+      <label><input type="checkbox" id="b-odd"> 奇數也硬跑</label>
+      <label><input type="checkbox" id="b-rej" checked> 顯示被拒絕的嘗試</label>
+      <button class="b pri" id="b-step">下一步</button>
+      <button class="b" id="b-play">▶ 自動播放</button>
+      <button class="b" id="b-next">跳到下一個解</button>
+      <button class="b" id="b-reset">重設</button>
+      <label>速度 <input type="range" id="b-speed" min="20" max="800" value="350" style="width:90px;direction:rtl"></label>
+    </div>
+    <div class="ringbox">
+      <div>
+        <svg id="b-svg" viewBox="0 0 360 360" style="width:100%;max-width:380px"></svg>
+        <div class="ctrl"><div class="stat"><b id="b-steps">0</b><span>步數</span></div><div class="stat"><b id="b-found">0</b><span>已找到的解</span></div><div class="stat"><b id="b-depth">1</b><span>目前深度</span></div></div>
+      </div>
+      <div>
+        <h3 style="margin-top:0">目前狀態 <span class="mono" id="b-arr" style="color:var(--acc)"></span></h3>
+        <div class="log" id="b-log"></div>
+        <h3>找到的解（就是程式的輸出）</h3>
+        <div class="sols" id="b-sols"></div>
+      </div>
+    </div>
+    <div class="note">顏色：<span style="color:var(--ok)">綠線</span>＝和是質數、<span style="color:var(--bad)">紅線</span>＝這一步失敗、<span style="color:var(--cyan)">藍色圓</span>＝剛放進去的數字。「回溯」就是把最後一格清掉，回到上一層換下一個數字試</div>
+    <h3>各 N 的解數量</h3>
+    <div class="ctrl"><button class="b" id="b-count">計算 N = 2 ~ 16 的解數量</button></div>
+    <div id="b-counttbl"></div>
+  </div>
+
+  <div class="pane" data-p="b-3">
+    <h2>解法拆解</h2>
+    <h3>1. 回溯法的骨架</h3>
+    <pre class="io">void dfs(int pos) {                 // pos = 現在要填第幾格
+    if (pos == N + 1) {             // 全部填完
+        if (最後一格 + 第一格 是質數) 輸出;
+        return;
+    }
+    for (int x = 2; x &lt;= N; x++) {  // 從小到大試 → 輸出自然是字典序
+        if (!used[x] &amp;&amp; isPrime[ans[pos-1] + x]) {
+            used[x] = true;  ans[pos] = x;   // 做選擇
+            dfs(pos + 1);                    // 往下走
+            used[x] = false;                 // 撤銷選擇（回溯）
+        }
+    }
+}</pre>
+    <p>關鍵是<b>「提早剪枝」</b>：每放一個數字就檢查它跟前一格的和是不是質數，不合就不往下走。不用等全部排完才檢查，這樣省下大量時間</p>
+
+    <h3>2. 奇數 N 一定無解（你有寫到這個優化）</h3>
+    <p>兩個數相加要是質數，而且這個和至少是 1+2=3，所以只能是<b>奇質數</b> → 相鄰兩數必須<b>一奇一偶</b>。環上奇偶要交錯，奇數和偶數個數必須相等，所以 N 必須是偶數。N 是奇數時奇數比偶數多一個，不可能交錯，直接不跑 DFS</p>
+    <div class="mathbox">N = 5 → 奇數 {1,3,5} 三個、偶數 {2,4} 兩個 → 必有兩個奇數相鄰 → 和是偶數 ≥ 4 → 不是質數</div>
+
+    <h3>3. 質數表只要到 31</h3>
+    <p>N ≤ 16，兩數和最大是 16+15 = 31，所以篩到 31 就夠。你開 <code>MAX = 40</code> 剛好</p>
+
+    <h3>4. 複雜度</h3>
+    <p>最壞是 O(N!)，但剪枝非常有效。N=16 實際只有 81024 個解，跑起來很快（可以在互動演示按「計算解數量」看）</p>
+  </div>
+
+  <div class="pane" data-p="b-4">
+    <h2>你的程式碼 <span class="pill">algome2_b.cpp</span></h2>
+    <div class="codewrap" data-code="B"></div>
+  </div>
+  <div class="pane" data-p="b-5"><h2>小測驗</h2><div data-quiz="B"></div></div>
+</section>
+
+<!-- ============ C ============ -->
+<section class="view" id="v-prob-c">
+  <span class="pill acc">Problem C</span><span class="pill">計數 + 質數判斷</span><span class="pill ok">你的程式：範例通過</span>
+  <h1>Counting the Primes</h1>
+  <p class="sub">數每個字元出現幾次，把「出現次數是質數」的字元按 ASCII 由小到大印出來</p>
+  <div class="tabs" data-for="c"></div>
+
+  <div class="pane" data-p="c-1">
+    <h2>題目重點</h2>
+    <ul class="clean">
+      <li>T 筆字串，只含 <code>0-9</code>、<code>A-Z</code>、<code>a-z</code>，長度 &lt; 2001</li>
+      <li>次數是質數的字元才輸出，<b>按 ASCII 遞增</b>排序</li>
+      <li>一個都沒有就輸出 <code>empty</code></li>
+      <li>格式：<code>Case k: </code> 後面接字元（字元之間沒有空格）</li>
+    </ul>
+    <h3>範例</h3>
+    <div class="iogrid">
+      <div><h4>Input</h4><pre class="io">3
+ABCC
+AABBBBDDDDD
+ABCDFFFF</pre></div>
+      <div><h4>Output</h4><pre class="io">Case 1: C
+Case 2: AD
+Case 3: empty</pre></div>
+    </div>
+    <div class="note">Case 2：A 出現 2 次（質數）、B 出現 4 次（不是）、D 出現 5 次（質數）→ <code>AD</code></div>
+  </div>
+
+  <div class="pane" data-p="c-2">
+    <h2>互動演示：輸入字串看次數</h2>
+    <div class="ctrl"><input class="b wide" id="c-in" value="AABBBBDDDDD" maxlength="400"><button class="b" data-cs="ABCC">範例 1</button><button class="b" data-cs="AABBBBDDDDD">範例 2</button><button class="b" data-cs="ABCDFFFF">範例 3</button><button class="b" data-cs="aaZZZ0011111bbbbbbb9">混合</button></div>
+    <div class="bars" id="c-bars"></div>
+    <div class="barlbl" id="c-lbl"></div>
+    <h3>輸出</h3>
+    <pre class="io" id="c-out"></pre>
+    <div class="note">注意 ASCII 順序：<code>'0'-'9'</code> (48–57) &lt; <code>'A'-'Z'</code> (65–90) &lt; <code>'a'-'z'</code> (97–122)。所以數字最前面、大寫第二、小寫最後。用「下標就是 ASCII 碼」的陣列從 0 掃到 127，順序自動就對了</div>
+  </div>
+
+  <div class="pane" data-p="c-3">
+    <h2>解法拆解</h2>
+    <ol class="kbdstep">
+      <li>開一個大小 128 的計數陣列 <code>cnt[128]</code>，每筆測資前清 0</li>
+      <li>掃過字串：<code>cnt[(int)s[i]]++</code>（字元本身就是 0~127 的整數，可以直接當下標）</li>
+      <li>從 i = 0 掃到 127，<code>cnt[i]</code> 是質數就印出 <code>(char)i</code></li>
+      <li>一個都沒印就印 <code>empty</code></li>
+    </ol>
+    <h3>質數判斷</h3>
+    <p>次數最多 2000，直接試除就好。你的 <code>prime()</code> 試到 v-1，最多 2000 次 × 128 個字元 × 200 筆，大約 5×10⁷，還是會過。更好的寫法是試到 √v：</p>
+    <pre class="io">bool prime(int v) {
+    if (v &lt; 2) return false;
+    for (int i = 2; i * i &lt;= v; i++)
+        if (v % i == 0) return false;
+    return true;
+}</pre>
+    <p>或者乾脆像 D 題一樣先篩一張到 2000 的質數表</p>
+    <div class="note warn">易錯：<b>1 不是質數</b>。只出現 1 次的字元不能輸出（範例 1 的 A、B 都只出現 1 次）</div>
+  </div>
+
+  <div class="pane" data-p="c-4">
+    <h2>你的程式碼 <span class="pill">algome2_c.cpp</span></h2>
+    <div class="codewrap" data-code="C"></div>
+  </div>
+  <div class="pane" data-p="c-5"><h2>小測驗</h2><div data-quiz="C"></div></div>
+</section>
+
+<!-- ============ D ============ -->
+<section class="view" id="v-prob-d">
+  <span class="pill acc">Problem D</span><span class="pill">埃氏篩法 + 奇偶性</span><span class="pill ok">你的程式：範例通過</span>
+  <h1>Goldbach and Euler</h1>
+  <p class="sub">判斷 n 能不能寫成兩個<b>不同</b>質數的和，可以的話要讓兩數差最小；n 最大 10⁸、最多 10 萬筆</p>
+  <div class="tabs" data-for="d"></div>
+
+  <div class="pane" data-p="d-1">
+    <h2>題目重點</h2>
+    <ul class="clean">
+      <li>輸入到 EOF，每行一個 n（0 &lt; n ≤ 100000000），總共 100000 行</li>
+      <li>輸出 <code>n is not the sum of two primes!</code> 或 <code>n is the sum of p1 and p2.</code></li>
+      <li>要求 <code>p2 − p1</code> <b>為正且最小</b> → 兩個質數不能相同，而且要盡量靠近 n/2</li>
+      <li>題目故事裡說「1 也算質數」，但看範例 <code>3 is not the sum</code> 就知道<b>1 不算</b>（不然 3 = 1 + 2）</li>
+      <li>「Your program must be very efficient」→ 10 萬筆查詢，每筆不能慢慢試除</li>
+    </ul>
+    <h3>範例（節錄）</h3>
+    <div class="iogrid">
+      <div><h4>Input</h4><pre class="io">4
+5
+6
+8
+11
+12</pre></div>
+      <div><h4>Output</h4><pre class="io">4 is not the sum of two primes!
+5 is the sum of 2 and 3.
+6 is not the sum of two primes!
+8 is the sum of 3 and 5.
+11 is not the sum of two primes!
+12 is the sum of 5 and 7.</pre></div>
+    </div>
+    <div class="note">為什麼 4 和 6 不行？4 = 2+2、6 = 3+3，兩數相同，差是 0 不是「正數」，所以不算</div>
+  </div>
+
+  <div class="pane" data-p="d-2">
+    <h2>互動演示 1：埃氏篩法</h2>
+    <div class="ctrl"><button class="b pri" id="d-sstep">下一步</button><button class="b" id="d-splay">▶ 自動播放</button><button class="b" id="d-sreset">重設</button><span id="d-smsg" style="color:var(--dim);font-size:13px"></span></div>
+    <div class="sieve" id="d-sieve"></div>
+    <div class="note">每找到一個還沒被劃掉的數 p，它就是質數；然後從 <b>p×p</b> 開始，每次加 p，把它的倍數劃掉。為什麼從 p×p 開始？因為比 p×p 小的倍數（2p、3p…）早就被更小的質數劃掉了。外層只要跑到 √MAX</div>
+
+    <h2>互動演示 2：找 n = p1 + p2</h2>
+    <div class="ctrl"><label>n <input class="b" id="d-n" value="100" style="width:140px"></label><button class="b pri" id="d-go">開始找</button><button class="b" data-dn="12">12</button><button class="b" data-dn="11">11</button><button class="b" data-dn="98">98</button><button class="b" data-dn="99999998">99999998</button></div>
+    <div id="d-res"></div>
+  </div>
+
+  <div class="pane" data-p="d-3">
+    <h2>解法拆解</h2>
+    <h3>步驟 1：預先篩出 10⁸ 以內的質數</h3>
+    <p>10 萬筆查詢，每筆都要判斷大數是不是質數，所以一開始就花一次時間把表建好，之後每次查表 O(1)。10⁸ 個 bool 要 100MB，用 <code>bitset</code> 每個只佔 1 bit，大約 12.5MB</p>
+    <div class="mathbox">埃氏篩法時間 O(N log log N)，N = 10⁸ 實測約 0.4 秒（我用 10 萬筆隨機測資跑過你的程式）</div>
+
+    <h3>步驟 2：n 是奇數 → 只有一種可能</h3>
+    <p>奇數 = 奇數 + 偶數。偶數的質數只有 2，所以答案只能是 <code>2 + (n−2)</code>，只要查 n−2 是不是質數</p>
+
+    <h3>步驟 3：n 是偶數 → 從 n/2 往下找</h3>
+    <p>要差最小，p1 要盡量接近 n/2。而且 p1 &lt; p2（嚴格），所以 p1 從 <b>n/2 − 1</b> 開始往下試（如果 n/2 是偶數就從 n/2 − 1，奇數就再往下調成奇數），找到的第一個 p1 讓 p1 和 n−p1 都是質數，就是答案</p>
+    <p>只試奇數，因為 p1 = 2 時 n−2 是偶數又大於 2，一定不是質數</p>
+    <div class="note">為什麼這樣夠快？質數在 n/2 附近很密，通常往下試幾十、幾百個就找到了（演示 2 可以看到嘗試次數）</div>
+
+    <h3>步驟 4：輸出要快</h3>
+    <p>10 萬行輸出，<code>endl</code> 每次都會 flush，比較慢。建議 <code>"\n"</code> 加上 <code>ios::sync_with_stdio(false); cin.tie(nullptr);</code></p>
+  </div>
+
+  <div class="pane" data-p="d-4">
+    <h2>你的程式碼 <span class="pill">algome2_d.cpp</span></h2>
+    <div class="codewrap" data-code="D"></div>
+  </div>
+  <div class="pane" data-p="d-5"><h2>小測驗</h2><div data-quiz="D"></div></div>
+</section>
+
+<!-- ============ E ============ -->
+<section class="view" id="v-prob-e">
+  <span class="pill acc">Problem E</span><span class="pill">動態規劃 DP</span><span class="pill warn">還沒寫 · 參考解已收起</span>
+  <h1>Falling in Love（格子路徑計數）</h1>
+  <p class="sub">從棋盤左上角走到右下角，只能往右、往下，有些十字路口很危險不能走，問有幾種走法（mod 10⁹+7）</p>
+  <div class="tabs" data-for="e"></div>
+
+  <div class="pane" data-p="e-1">
+    <h2>題目重點</h2>
+    <ul class="clean">
+      <li>W 條東西向道路（橫的，對應「列」）、N 條南北向道路（直的，對應「行」）</li>
+      <li>十字路口 = 第 i 條橫路和第 j 條直路的交點，記成 (i, j)</li>
+      <li>起點 (1, 1)、終點 (W, N)；只能往右（j+1）或往下（i+1）</li>
+      <li>接下來 W 行，每行第一個數是「第幾條東西向道路」，後面 0 個或多個數是「這條路上哪些路口危險」</li>
+      <li>答案可能很大，要 <b>mod 10⁹+7</b></li>
+      <li>W, N &lt; 4000 → 格子最多 1600 萬個，要 O(W·N)</li>
+    </ul>
+    <h3>範例</h3>
+    <div class="iogrid">
+      <div><h4>Input</h4><pre class="io">2
+4 5
+1
+2 2
+3 3 5
+4
+5 5
+1
+2 1 2 3 4
+3 1 2 3
+4 1 2 3 5
+5 1 2 3</pre></div>
+      <div><h4>Output</h4><pre class="io">4
+0</pre></div>
+    </div>
+    <div class="note">第一筆：4 條橫路、5 條直路，危險路口是 (2,2)、(3,3)、(3,5)。第 1、4 行後面沒有數字，代表那條路沒有危險路口</div>
+  </div>
+
+  <div class="pane" data-p="e-2">
+    <h2>互動演示：點路口切換危險／安全</h2>
+    <div class="ctrl">
+      <label>W <select class="b" id="e-w"></select></label>
+      <label>N <select class="b" id="e-n"></select></label>
+      <button class="b" id="e-s1">範例 1</button><button class="b" id="e-s2">範例 2</button><button class="b" id="e-clear">清空</button>
+      <button class="b pri" id="e-anim">▶ 動畫填表</button>
+    </div>
+    <svg id="e-svg" style="width:100%;max-width:640px"></svg>
+    <div class="ctrl"><div class="stat"><b id="e-ans">0</b><span>走法數（終點的 dp 值）</span></div></div>
+    <p id="e-why" style="color:var(--dim);font-size:13px;min-height:24px">滑鼠移到路口上看它的 dp 值是怎麼算出來的</p>
+  </div>
+
+  <div class="pane" data-p="e-3">
+    <h2>解法拆解</h2>
+    <h3>狀態與轉移</h3>
+    <p>令 <code>dp[i][j]</code> = 從起點走到路口 (i, j) 的走法數。因為只能往右或往下，要走到 (i, j)，上一步一定是從<b>上面</b> (i−1, j) 或<b>左邊</b> (i, j−1) 來：</p>
+    <div class="mathbox">dp[1][1] = 1                                (起點，若起點危險則為 0)
+dp[i][j] = 0                                 若 (i, j) 危險
+dp[i][j] = dp[i-1][j] + dp[i][j-1]   (mod 1e9+7)   其他情況
+答案 = dp[W][N]</div>
+    <p>危險的路口設成 0，就代表「沒有任何路線能經過這裡」，它對後面的格子貢獻也是 0，等於自動繞開</p>
+
+    <h3>空間優化：一維陣列</h3>
+    <p>4000 × 4000 的 long long 要 128MB。注意 <code>dp[i][j]</code> 只用到「這一列的左邊」和「上一列的同一行」，所以只要一個一維陣列 <code>dp[j]</code>：更新前的 <code>dp[j]</code> 就是上面，<code>dp[j-1]</code> 已經是這一列的左邊</p>
+    <pre class="io">dp[j] = (dp[j] + dp[j-1]) % MOD;   // 舊的 dp[j] = 上面，dp[j-1] = 左邊</pre>
+
+    <h3>輸入的坑：每行數字個數不固定</h3>
+    <p>每條東西向道路後面有「0 個或多個」危險路口，不能用固定次數的 <code>cin</code>。要<b>整行讀進來</b>再拆：</p>
+    <pre class="io">getline(cin, line);
+stringstream ss(line);
+ss &gt;&gt; row;
+while (ss &gt;&gt; col) bad[row][col] = true;</pre>
+    <div class="note warn">混用 <code>cin &gt;&gt;</code> 和 <code>getline</code> 時要小心：<code>cin &gt;&gt; W &gt;&gt; N</code> 之後換行字元還留在緩衝區，下一次 getline 會讀到空字串。參考解是全部都用 getline 讀，就沒這個問題</div>
+
+    <h3>這題跟課本的關係</h3>
+    <p>這就是 Chapter 3 動態規劃裡最基本的「格子路徑」問題。沒有障礙時答案是組合數 C(W+N−2, W−1)，有障礙就只能 DP</p>
+  </div>
+
+  <div class="pane" data-p="e-4">
+    <h2>參考解 <span class="pill warn">我補的，不是你寫的</span></h2>
+    <p style="color:var(--dim)">這題你還沒寫，建議先看「解法拆解」自己寫完，再點開對照。參考解用題目兩組範例測過，輸出 4 和 0</p>
+    <details class="spoil"><summary>我寫完了／我想看參考解（點開）</summary><div class="codewrap" data-code="E" style="margin-top:12px"></div></details>
+  </div>
+  <div class="pane" data-p="e-5"><h2>小測驗</h2><div data-quiz="E"></div></div>
+</section>
+
+<!-- ============ F ============ -->
+<section class="view" id="v-prob-f">
+  <span class="pill acc">Problem F</span><span class="pill">掃描線 Sweep Line</span><span class="pill ok">你的程式：範例通過</span>
+  <h1>Equipments of Kitchen（廚具租借）</h1>
+  <p class="sub">n 筆租借時段 [s, d)，同一時間最多有幾筆在用 → 就是至少要準備幾套設備</p>
+  <div class="tabs" data-for="f"></div>
+
+  <div class="pane" data-p="f-1">
+    <h2>題目重點</h2>
+    <ul class="clean">
+      <li>多筆測資（讀到 EOF）；每筆第一行 n，第二行 <code>S1 D1 S2 D2 … Sn Dn</code></li>
+      <li>結束時間 d 那一刻設備就空出來，<b>可以馬上給下一個人</b>（區間是半開的 [s, d)）</li>
+      <li>求最少要幾套設備 = 任何時刻<b>同時在用的最大數量</b></li>
+    </ul>
+    <h3>範例</h3>
+    <div class="iogrid">
+      <div><h4>Input</h4><pre class="io">3
+1 6 3 12 6 18</pre></div>
+      <div><h4>Output</h4><pre class="io">2</pre></div>
+    </div>
+    <div class="note">三筆：[1,6)、[3,12)、[6,18)。時間 6 第一筆剛好還回來，第三筆接著用同一套，所以只要 2 套。如果把「6 結束、6 開始」算成重疊，就會錯算成 3</div>
+  </div>
+
+  <div class="pane" data-p="f-2">
+    <h2>互動演示：掃描線</h2>
+    <div class="ctrl" style="align-items:flex-start;flex-direction:column">
+      <label style="width:100%">輸入 S1 D1 S2 D2 …（可以自己改）</label>
+      <textarea class="b" id="f-in">1 6 3 12 6 18</textarea>
+    </div>
+    <div class="ctrl">
+      <button class="b" data-fs="1 6 3 12 6 18">範例</button>
+      <button class="b" data-fs="1 4 2 5 3 6 4 7 5 8 6 9">樓梯</button>
+      <button class="b" data-fs="2 10 3 5 4 9 5 7 7 12 9 14 11 15 1 3">混合</button>
+      <button class="b" id="f-rand">隨機</button>
+      <button class="b pri" id="f-step">下一個事件</button>
+      <button class="b" id="f-play">▶ 自動播放</button>
+      <button class="b" id="f-reset">重設</button>
+    </div>
+    <div class="tl"><svg id="f-svg" style="font-family:var(--mono)"></svg></div>
+    <h3>排序後的事件（時間, +1 開始 / −1 結束）</h3>
+    <div class="evlist" id="f-ev"></div>
+    <div class="ctrl"><div class="stat"><b id="f-cnt">0</b><span>目前使用中</span></div><div class="stat"><b id="f-max">0</b><span>最大值 = 答案</span></div></div>
+    <p id="f-msg" style="color:var(--dim);font-size:13px"></p>
+  </div>
+
+  <div class="pane" data-p="f-3">
+    <h2>解法拆解</h2>
+    <h3>想法：把區間拆成事件</h3>
+    <p>每筆租借 [s, d) 變成兩個事件：<code>(s, +1)</code> 有人開始用、<code>(d, −1)</code> 有人還回來。把 2n 個事件按時間排序，從左掃到右，維護一個計數器，計數器的最大值就是答案</p>
+    <h3>同一時間的事件，誰先？</h3>
+    <p>題目說結束那刻就能給下一個人，所以同時間要<b>先處理 −1 再處理 +1</b>。你用 <code>pair&lt;int,int&gt;</code> 存 <code>(時間, ±1)</code>，pair 的排序是先比 first、相同再比 second，而 −1 &lt; +1，所以<b>自動就是先還再借</b>。這是整題最關鍵的一點，你處理得很漂亮</p>
+    <div class="mathbox">事件：(1,+1) (3,+1) (6,-1) (6,+1) (12,-1) (18,-1)
+計數：  1      2      1      2       1       0      → 最大 2</div>
+    <h3>另一個角度：貪婪的區間分配</h3>
+    <p>按開始時間排序，每筆訂單都拿「已經空出來的設備」，沒有就開一套新的。用 min-heap 存每套設備的歸還時間。新開的套數 = 答案，和掃描線結果相同（演示裡每條橫條上的「#k」就是用這個方法分到的設備編號）</p>
+    <div class="note">複雜度：排序 O(n log n)。另外因為時間 ≤ 100000，也可以用差分陣列：<code>diff[s]++, diff[d]--</code>，再做前綴和取最大值，O(n + T)</div>
+  </div>
+
+  <div class="pane" data-p="f-4">
+    <h2>你的程式碼 <span class="pill">algome2_f.cpp</span></h2>
+    <div class="codewrap" data-code="F"></div>
+  </div>
+  <div class="pane" data-p="f-5"><h2>小測驗</h2><div data-quiz="F"></div></div>
+</section>
+
+<!-- ============ G ============ -->
+<section class="view" id="v-prob-g">
+  <span class="pill acc">Problem G</span><span class="pill">字串大數 + 同餘</span><span class="pill ok">你的程式：範例通過</span>
+  <h1>Counterfeit Money（偽鈔檢查）</h1>
+  <p class="sub">最多 1000 位數的序號，從右邊每 3 位一組，交錯加減，結果能被 13 整除就是真鈔</p>
+  <div class="tabs" data-for="g"></div>
+
+  <div class="pane" data-p="g-1">
+    <h2>題目重點</h2>
+    <ul class="clean">
+      <li>t 筆，每筆一個正整數，<b>最多 1000 位</b> → 不能存進 long long，要當字串處理</li>
+      <li>從<b>右邊</b>開始每 3 位一組，最右邊那組是 +，接著 −、+、−… 交錯</li>
+      <li>輸出計算結果的<b>絕對值</b>，空一格，再輸出 <code>YES</code>（能被 13 整除）或 <code>NO</code></li>
+    </ul>
+    <h3>範例</h3>
+    <div class="iogrid">
+      <div><h4>Input</h4><pre class="io">2
+123456789
+593825856</pre></div>
+      <div><h4>Output</h4><pre class="io">456 NO
+624 YES</pre></div>
+    </div>
+    <div class="mathbox">123,456,789 → 789 − 456 + 123 = 456   456 ÷ 13 不整除 → NO
+593,825,856 → 856 − 825 + 593 = 624   624 = 13 × 48     → YES</div>
+  </div>
+
+  <div class="pane" data-p="g-2">
+    <h2>互動演示</h2>
+    <div class="ctrl"><input class="b wide" id="g-in" value="593825856"><button class="b" data-gs="123456789">範例 1</button><button class="b" data-gs="593825856">範例 2</button><button class="b" id="g-r13">隨機 13 的倍數</button><button class="b" id="g-rnd">隨機數字</button></div>
+    <h3>分組（從右邊開始，綠色 +、紅色 −）</h3>
+    <div class="digits" id="g-digits"></div>
+    <div class="chips" id="g-chips"></div>
+    <div class="mathbox" id="g-expr"></div>
+    <div class="ctrl"><div class="stat"><b id="g-sum">0</b><span>交錯和</span></div><div class="stat"><b id="g-abs">0</b><span>絕對值（輸出）</span></div><div class="stat"><b id="g-yn">-</b><span>能被 13 整除？</span></div><div class="stat"><b id="g-chk" style="font-size:15px">-</b><span>直接用 BigInt 驗算 n % 13</span></div></div>
+    <pre class="io" id="g-out"></pre>
+  </div>
+
+  <div class="pane" data-p="g-3">
+    <h2>解法拆解</h2>
+    <h3>為什麼這個方法是對的？</h3>
+    <p>關鍵是 <b>1001 = 7 × 11 × 13</b>。所以 1000 = 1001 − 1 ≡ −1 (mod 13)</p>
+    <div class="mathbox">n = g0 + g1·1000 + g2·1000² + g3·1000³ + …
+  ≡ g0 + g1·(−1) + g2·(−1)² + g3·(−1)³ + …   (mod 13)
+  = g0 − g1 + g2 − g3 + …</div>
+    <p>g0 是最右邊那組。交錯和跟原數 mod 13 同餘，所以「交錯和被 13 整除」⇔「原數被 13 整除」。順帶一提，同一招也能判斷 7 和 11</p>
+    <h3>實作步驟</h3>
+    <ol class="kbdstep">
+      <li>用 <code>string</code> 讀入數字</li>
+      <li>從最後一個字元往前走，用計數器 0/1/2 組出 3 位數：個位 + 10×十位 + 100×百位</li>
+      <li>湊滿 3 位就乘上目前符號（+1 或 −1）加進總和，符號翻轉</li>
+      <li>迴圈結束後，最左邊可能剩 1~2 位沒湊滿，也要加進去</li>
+      <li>判斷 <code>sum % 13 == 0</code>，輸出 <code>abs(sum)</code></li>
+    </ol>
+    <div class="note">負數取餘：C++ 中 <code>-26 % 13 == 0</code>、<code>-27 % 13 == -1</code>。判斷「是不是 0」不受影響，所以你直接 <code>sum % 13 == 0</code> 是對的</div>
+    <div class="note">數值範圍：1000 位 → 最多 334 組，每組 ≤ 999，|sum| ≤ 約 33 萬，int 就裝得下。你用 <code>#define int long long</code> 也沒問題</div>
+  </div>
+
+  <div class="pane" data-p="g-4">
+    <h2>你的程式碼 <span class="pill">algome2_g.cpp</span></h2>
+    <div class="codewrap" data-code="G"></div>
+  </div>
+  <div class="pane" data-p="g-5"><h2>小測驗</h2><div data-quiz="G"></div></div>
+</section>
+
+<!-- ============ CHEATSHEET ============ -->
+<section class="view" id="v-cheatsheet">
+  <h1>考前速查表</h1>
+  <p class="sub">這次 7 題用到的技巧，整理成可以直接套的模板</p>
+  <div class="grid2">
+    <div class="card"><h3>埃氏篩法（D、也可用在 B、C）</h3><pre class="io">bitset&lt;MAX+1&gt; comp;          // true = 合數
+comp[0] = comp[1] = 1;
+for (long long i = 2; i*i &lt;= MAX; i++)
+  if (!comp[i])
+    for (long long j = i*i; j &lt;= MAX; j += i)
+      comp[j] = 1;</pre></div>
+    <div class="card"><h3>回溯模板（B）</h3><pre class="io">void dfs(int pos) {
+  if (pos == N) { 檢查並輸出; return; }
+  for (每個候選 x)
+    if (合法(x)) {
+      做選擇;  dfs(pos+1);  撤銷選擇;
+    }
+}</pre></div>
+    <div class="card"><h3>掃描線（F）</h3><pre class="io">vector&lt;pair&lt;int,int&gt;&gt; ev;
+for (...) { ev.push_back({s, +1});
+            ev.push_back({d, -1}); }
+sort(ev.begin(), ev.end());  // 同時間 -1 先
+int cur = 0, best = 0;
+for (auto [t, v] : ev) best = max(best, cur += v);</pre></div>
+    <div class="card"><h3>格子路徑 DP（E）</h3><pre class="io">dp[j] 一維滾動：
+for i = 1..W
+  for j = 1..N
+    if (bad[i][j]) dp[j] = 0;
+    else if (i==1 &amp;&amp; j==1) dp[j] = 1;
+    else dp[j] = (dp[j] + dp[j-1]) % MOD;</pre></div>
+    <div class="card"><h3>8 方向鄰居（A）</h3><pre class="io">int dx[] = {-1,1,0,0,-1,-1,1,1};
+int dy[] = {0,0,-1,1,-1,1,-1,1};
+for (int k = 0; k &lt; 8; k++) {
+  int x = i+dx[k], y = j+dy[k];
+  if (x&lt;0||x&gt;=n||y&lt;0||y&gt;=m) continue;
+  ...
+}</pre></div>
+    <div class="card"><h3>不定個數的一行輸入（E）</h3><pre class="io">string line;
+getline(cin, line);
+stringstream ss(line);
+int x;
+while (ss &gt;&gt; x) { ... }</pre></div>
+    <div class="card"><h3>快速 I/O（D 這種 10 萬行）</h3><pre class="io">ios::sync_with_stdio(false);
+cin.tie(nullptr);
+cout &lt;&lt; ans &lt;&lt; '\n';   // 不要用 endl</pre></div>
+    <div class="card"><h3>常見數學小結論</h3><ul class="clean">
+      <li>大於 2 的質數都是奇數 → 兩數和是奇質數就必須一奇一偶</li>
+      <li>1001 = 7×11×13 → 1000 ≡ −1，3 位一組交錯加減</li>
+      <li>1 不是質數；2 是唯一的偶質數</li>
+      <li>C++ 負數 % 的結果可能是負的，判斷 ==0 沒影響</li>
+    </ul></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- ============ SOURCE CODES ============ -->
+<script type="text/plain" id="src-A">#include <iostream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+int main(){
+    int n;
+    cin >> n;
+    int a, b, one, two, sum;
+    for(int z=1;z<n+1;z++){
+
+        cin >> a >> b >> one >> two;
+        int sum = one + two;
+        int arr[a][b];
+        for(int i=0;i<a;i++){
+            for(int j=0;j<b;j++) arr[i][j] = 0;
+        }
+
+        string input;
+        for(int i=0;i<a;i++){
+            cin >> input;
+            for(int j=0;j<b;j++){
+                if(input[j]=='V'){
+                    arr[i][j] = sum;
+                    if(i>0){
+                        if(j>0) arr[i-1][j-1] = max(arr[i-1][j-1], two);
+                        if(j<b-1) arr[i-1][j+1] = max(arr[i-1][j+1], two);
+                        arr[i-1][j] = max(arr[i-1][j], one);
+                    }
+                    if(i<a-1){
+                        if(j>0) arr[i+1][j-1] = max(arr[i+1][j-1], two);
+                        if(j<b-1) arr[i+1][j+1] = max(arr[i+1][j+1], two);
+                        arr[i+1][j] = max(arr[i+1][j], one);
+                    }
+                    if(j>0) arr[i][j-1] = max(arr[i][j-1], one);
+                    if(j<b-1) arr[i][j+1] = max(arr[i][j+1], one);
+                }
+            }
+        }
+        cout << "Airplane #" << z << ":\n";
+        for(int i=0;i<a;i++){
+            for(int j=0;j<b;j++){
+                if(arr[i][j]==sum) cout << 'V';
+                else cout << arr[i][j];
+            }
+            cout << endl;
+        }
+    }
+    return 0;
+}</script>
+<script type="text/plain" id="src-B">#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+vector<bool> vis;
+vector<int> ans;
+vector<bool> isprime;
+
+int input;
+const int MAX = 40;
+
+void dfs(int n){
+    if(n==input+1){
+        if(!isprime[ans[input]+ans[1]]) return;
+        for(int i=1;i<n;i++){
+            cout << ans[i] << " ";
+        }
+        cout << endl;
+    }
+    for(int i=2;i<input+1;i++){
+        if(!vis[i] && isprime[ans[n-1]+i]){
+            vis[i] = true;
+            ans[n] = i;
+            dfs(n+1);
+            vis[i] = false;
+        }
+    }
+}
+
+int main(){
+    int how = 1;
+    isprime.assign(MAX, true);
+    isprime[0] = false;
+    isprime[1] = false;
+    bool first = true;
+
+    for(int i=2;i*i<MAX;i++){
+        for(int j=i*i;j<MAX;j+=i) isprime[j] = false;
+    }
+    while(cin >> input){
+        if(first) first = false;
+        else cout << endl;
+        vis.assign(MAX, false);
+        ans.assign(MAX, 0);
+        ans[1] = 1;
+        vis[1] = true;
+        cout << "Case " << how++ << ":\n";
+        if(input%2==0) dfs(2);
+    }
+
+}</script>
+<script type="text/plain" id="src-C">#include <iostream>
+#include <string>
+using namespace std;
+int n;
+string input;
+bool prime(int v){
+    if(v<=1) return false;
+    for(int i=2;i<v;i++){
+        if(v%i==0) return false;
+    }
+    return true;
+}
+int main(){
+    cin >> n;
+    bool haveans = false;
+    int arr[128];
+    for(int z=1;z<n+1;z++){
+        for(int i=0;i<128;i++) arr[i] = 0;
+        haveans = false;
+        cin >> input;
+        cout << "Case " << z << ": ";
+        for(int i=0;i<input.length();i++) arr[(int)input[i]]++;
+        for(int i=0;i<128;i++){
+            if(arr[i]!=0 && prime(arr[i])){
+                haveans = true;
+                cout << (char)i;
+            }
+        }
+        if(!haveans) cout << "empty";
+        cout << endl;
+    }
+    return 0;
+}</script>
+<script type="text/plain" id="src-D">// 用埃式篩法把質數表先建立起來
+// 當輸入n為奇數，只需要考慮n-2是否為質數
+#include <iostream>
+#include <string>
+#include <bitset>
+using namespace std;
+#define int long long
+
+const int MAX = 100000000;
+bitset<MAX+1> list;
+
+bool isprime(int i){
+    return !list[i];
+}
+signed main(){
+    int n;
+    list[0] = true;
+    list[1] = true;
+    list[2] = false;
+    int v = 1;
+    for(int i=2;i*i<=MAX;i++){
+        if(!list[i]) for(int j=i*i;j<=MAX;j+=i) list[j] = true;
+    }
+    // for(int i=0;i<30;i++) cout << list[i]<<" ";
+    while(cin >> n){
+        int ansone = -1, anstwo = -1;
+        if (n % 2 != 0) {
+            // 奇數：只能是 2 + (n-2)
+            if (n > 2 && isprime(n - 2)) {
+                ansone = 2;
+                anstwo = n - 2;
+            }
+        } else {
+            // 偶數：從中間開始往下找，且只找「奇數」
+            // 為了確保 p2 - p1 是正數 (p1 < p2)，p1 最大只能是 n/2 - 1
+            int start = n / 2 - 1;
+            if (start % 2 == 0) start--; // 若起點剛好是偶數，減一變成奇數
+
+            // 每次 i -= 2，略過所有偶數
+            for(int i = start; i >= 3; i -= 2){
+                if(isprime(i) && isprime(n - i)){
+                    ansone = i;
+                    anstwo = n - i;
+                    break;
+                }
+            }
+        }
+        if(ansone==-1) cout << n << " is not the sum of two primes!\n";
+        else cout << n << " is the sum of " << ansone << " and " << anstwo << "." << endl;
+    }
+    return 0;
+}</script>
+<script type="text/plain" id="src-E">#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+using namespace std;
+const long long MOD = 1000000007LL;
+
+int main(){
+    int T;
+    string line;
+    getline(cin, line);
+    T = stoi(line);
+    while(T--){
+        int W, N;
+        getline(cin, line);
+        while(line.find_first_not_of(" \r\t") == string::npos) getline(cin, line);
+        stringstream head(line);
+        head >> W >> N;
+        vector<vector<char>> bad(W + 1, vector<char>(N + 1, 0));
+        for(int k = 0; k < W; k++){
+            getline(cin, line);
+            stringstream ss(line);
+            int row, col;
+            ss >> row;
+            while(ss >> col) bad[row][col] = 1;
+        }
+        vector<long long> dp(N + 1, 0);
+        for(int i = 1; i <= W; i++){
+            for(int j = 1; j <= N; j++){
+                if(bad[i][j])             dp[j] = 0;
+                else if(i == 1 && j == 1) dp[j] = 1;
+                else                      dp[j] = (dp[j] + dp[j-1]) % MOD;
+            }
+        }
+        cout << dp[N] << "\n";
+    }
+    return 0;
+}</script>
+<script type="text/plain" id="src-F">#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+int main(){
+    int n;
+    while(cin >> n){
+        vector<pair<int, int>> time;
+        int f, e;
+        for(int i=0;i<n;i++){
+            cin >> f>>e;
+            time.push_back({f, 1});
+            time.push_back({e, -1});
+        }
+        sort(time.begin(), time.end());
+        int count = 0;
+        int ans = 0;
+        for(auto &a : time){
+            count += a.second;
+            ans = max(count, ans);
+        }
+        cout << ans << endl;
+    }
+}</script>
+<script type="text/plain" id="src-G">#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+#define int long long
+
+signed main(){
+    int n;
+    string input;
+    cin >> n;
+    while(n--){
+        cin >> input;
+        int sum = 0;
+        int value = 0;
+        int signf = 1;
+        int count = 0;
+        for(int i=input.length()-1;i>=0;i--){
+            if(count==0) value = input[i] - '0';
+            else if(count==1)value = value + 10*(input[i]-'0');
+            else if(count==2)value = value + 100*(input[i]-'0');
+            // cout << value << endl;
+            count++;
+            if(count==3){
+                sum += value * signf;
+                count = 0;
+                value = 0;
+                signf *= -1;
+            }
+        }
+        sum += value * signf;
+        if(sum%13==0) cout << abs(sum) << " YES";
+        else cout << abs(sum) << " NO";
+        cout << endl;
+    }
+    return 0;
+}</script>
+
+<script>
+/* ================= DATA: code notes ================= */
+const NOTES = {
+A: [
+ [1,6,"引入標頭檔。真正用到的是 <code>iostream</code>（輸入輸出）、<code>string</code>（讀每一行座位）和 <code>algorithm</code>（<code>max</code>）。<code>sstream</code>、<code>vector</code> 沒用到，留著也沒關係"],
+ [9,10,"讀入測資筆數 t（你取名叫 <code>n</code>）"],
+ [11,"宣告變數：<code>a</code>=列數 n、<code>b</code>=行數 m、<code>one</code>=d1、<code>two</code>=d2。<br><br>⚠ 這裡的 <code>sum</code> 其實沒被用到：第 15 行又在迴圈裡宣告了一個新的 <code>int sum</code>，把這個外面的「遮住」（shadowing）了。不影響答案，但可以刪掉"],
+ [12,"z 從 1 開始數，因為輸出要印 <code>Airplane #1</code>、<code>#2</code>…"],
+ [14,"讀這架飛機的 <code>n m d1 d2</code>"],
+ [15,"<b>這行是你整份程式的巧思</b>：用 <code>d1 + d2</code> 當作「這格是 V」的記號。<br><br>為什麼不會跟天數搞混？題目保證 <code>1 ≤ d2 ≤ d1</code>，所以 <code>d1 + d2 &gt; d1</code>，比任何可能的隔離天數都大。輸出時看到這個值就印 V"],
+ [16,19,"開一個 a×b 的二維陣列，全部設成 0（0 = 不用隔離）。<br><br>小提醒：<code>int arr[a][b]</code> 這種大小由變數決定的陣列叫 VLA，是 GCC 的擴充功能，不是標準 C++。考試用 g++ 沒問題，換成 MSVC 會編譯失敗。標準寫法是 <code>vector&lt;vector&lt;int&gt;&gt; arr(a, vector&lt;int&gt;(b, 0));</code>"],
+ [21,24,"一列一列讀座位字串，邊讀邊處理。因為處理一個 V 只會改到它周圍的格子，不需要先把整張圖讀完"],
+ [25,26,"遇到 V，先把自己設成記號值 <code>sum</code>"],
+ [27,31,"處理<b>上一列</b>（i−1）：左上、右上是斜角 → <code>two</code>(d2)；正上方是直接相鄰 → <code>one</code>(d1)。<br><br>用 <code>max</code> 而不是 <code>+=</code>，就是題目說的「不累加、取最大值」。<code>if(i&gt;0)</code>、<code>if(j&gt;0)</code>、<code>if(j&lt;b-1)</code> 是邊界檢查，避免陣列越界"],
+ [32,36,"處理<b>下一列</b>（i+1），邏輯跟上面一樣"],
+ [37,38,"處理<b>同一列</b>的左、右，直接相鄰 → d1"],
+ [25,39,"整段的正確性：<br>• 如果某個 V 的鄰居也是 V，<code>max(sum, one)</code> 還是 <code>sum</code>，V 不會被蓋掉<br>• 如果某格先被算成天數，後來讀到它自己是 V，第 26 行直接改成 <code>sum</code><br>所以 V 出現的順序不影響結果 👍"],
+ [42,"印標題。注意格式是 <code>Airplane #1:</code> 後面直接換行"],
+ [43,49,"輸出：值等於 <code>sum</code> 就印 <code>V</code>，否則印天數。因為 <code>d1 &lt; 10</code>，天數都是個位數，所以一格一個字元剛好對齊，不用空格"],
+],
+B: [
+ [5,7,"全域變數：<code>vis[i]</code> 記錄數字 i 用過沒、<code>ans[k]</code> 是第 k 格放的數字、<code>isprime</code> 質數表。放全域的好處是 dfs 不用一直傳參數"],
+ [9,10,"<code>input</code> 是 N。<code>MAX = 40</code>：N ≤ 16，兩數和最大 16+15=31，開到 40 夠用"],
+ [12,"<code>dfs(n)</code> 的 n 意思是「現在要填第 n 格」（1-indexed）。第 1 格固定是 1，所以 main 從 <code>dfs(2)</code> 開始"],
+ [13,"終止條件：n 已經超過 N，代表第 1~N 格全部填好了"],
+ [14,"檢查<b>環的接口</b>：最後一格 + 第一格也要是質數。不是就放棄這個排法"],
+ [15,18,"印出 1~N 格的數字。<br><br>小細節：每個數字後面都有空格，所以行尾會多一個空格。大部分 judge 會忽略行尾空白，但如果遇到嚴格比對的就會 WA。保險寫法：<code>cout &lt;&lt; ans[i] &lt;&lt; (i==input ? \"\\n\" : \" \");</code>"],
+ [19,"⚠ 這裡少了一個 <code>return;</code>。印完之後程式會繼續往下跑第 20 行的 for 迴圈，雖然此時所有數字都 <code>vis</code> 過了，迴圈什麼都不會做，結果仍然正確，但加上 return 比較清楚、也省一點時間"],
+ [20,21,"從 2 試到 N（從小到大 → 輸出自然是字典序）。兩個條件同時剪枝：<br>• <code>!vis[i]</code>：i 還沒用過<br>• <code>isprime[ans[n-1]+i]</code>：跟前一格的和是質數"],
+ [22,24,"<b>做選擇</b>：標記 i 用過、放進第 n 格，然後遞迴填下一格"],
+ [25,"<b>撤銷選擇（回溯）</b>：把 i 還回去，讓迴圈試下一個數字。<code>ans[n]</code> 不用清，因為下次會直接被覆蓋"],
+ [31,"<code>how</code> 是 Case 編號"],
+ [32,39,"埃氏篩法建質數表到 39。先全設 true，0 和 1 設 false，再把每個 i 的倍數（從 i×i 開始）設 false"],
+ [35,"<code>first</code> 用來控制「Case 之間空一行」：第一個 Case 前面不印空行，之後每個 Case 前面先印一個空行"],
+ [40,42,"讀到 EOF 為止。除了第一筆，每筆開頭先印空行，這樣最後一筆後面不會多一個空行"],
+ [43,46,"每筆測資重新初始化：清空 vis 和 ans，第一格放 1 並標記用過"],
+ [47,"印 <code>Case k:</code>"],
+ [48,"<b>奇偶性剪枝</b>：N 是奇數一定無解（奇數比偶數多，環上必有兩個奇數相鄰，和是偶數 ≥ 4 不是質數），直接不跑 DFS。<br><br>邊界小觀察：N=2 時會印出一行 <code>1 2</code>（順時針、逆時針是同一個排法）"],
+],
+C: [
+ [4,5,"全域：<code>n</code> 是測資筆數 T，<code>input</code> 是每行字串"],
+ [6,12,"判斷 v 是不是質數：≤1 直接不是，再從 2 試到 v−1。<br><br>可以改成 <code>i*i &lt;= v</code>，只試到 √v，快很多。不過這題次數最多 2000，原本的寫法也夠快"],
+ [16,"<code>arr[128]</code>：下標是字元的 ASCII 碼，值是出現次數。題目只有 0-9、A-Z、a-z，ASCII 都 &lt; 128"],
+ [18,19,"每筆測資開始前把計數清 0、<code>haveans</code> 重設。<b>忘記清空是多筆測資最常見的錯誤</b>，你有記得 👍"],
+ [21,"先印 <code>Case k: </code>（冒號後有空格）"],
+ [22,"計數：字元轉成 int 就是 ASCII 碼，直接當下標 +1"],
+ [23,28,"從 ASCII 0 掃到 127：這個順序本身就是「按 ASCII 遞增」，所以不用另外排序。次數不為 0 且是質數 → 印出字元並標記有答案"],
+ [29,"一個都沒有就印 <code>empty</code>"],
+],
+D: [
+ [1,2,"你自己寫的註解，總結了兩個重點：篩法建表、奇數只看 n−2"],
+ [7,"<code>#define int long long</code>：把所有 int 換成 long long，所以 main 要寫成 <code>signed main()</code>（因為 <code>long long main</code> 不合法）。這題 n ≤ 10⁸，其實 int 就夠，但 <code>i*i</code> 之類的乘法用 long long 比較保險"],
+ [9,10,"<code>bitset&lt;MAX+1&gt;</code>：一億個 bit ≈ 12.5MB。如果用 <code>bool</code> 陣列要 100MB。<br><br>這裡 <code>list[i] == true</code> 代表 i <b>不是</b>質數（被劃掉）。<br><br>小提醒：<code>list</code> 跟 <code>std::list</code> 同名，因為有 <code>using namespace std</code>，在某些編譯器會產生名稱衝突，改成 <code>composite</code> 之類比較安全"],
+ [12,14,"查表：沒被劃掉就是質數"],
+ [17,19,"0、1 不是質數；<code>list[2] = false</code> 本來就是預設值，這行可以省略"],
+ [20,"<code>v</code> 沒用到，可以刪"],
+ [21,23,"<b>埃氏篩法</b>：i 從 2 跑到 √MAX，如果 i 還沒被劃掉（是質數），就從 i×i 開始把它的倍數全劃掉。<code>if(!list[i])</code> 這個判斷很重要，少了它會多做很多重複的工"],
+ [25,"讀到 EOF"],
+ [27,32,"<b>奇數</b>：奇 = 奇 + 偶，唯一的偶質數是 2，所以只能是 2 + (n−2)。<code>n &gt; 2</code> 排除 n=1（n−2 = −1 會越界）"],
+ [33,46,"<b>偶數</b>：p1 &lt; p2 嚴格，所以 p1 最大是 n/2 − 1；而且要找奇數，所以如果起點是偶數就再減 1。從大往小找，第一個找到的 p1 最靠近 n/2，差就最小，馬上 break"],
+ [40,"迴圈到 3 為止：p1 = 2 時 n−2 是大於 2 的偶數，不可能是質數，不用試"],
+ [48,49,"輸出。注意第一種用 <code>\\n</code>、第二種用 <code>endl</code>。10 萬行用 endl 每次 flush 會比較慢；建議全部改 <code>\\n</code>，並在 main 開頭加 <code>ios::sync_with_stdio(false); cin.tie(nullptr);</code>"],
+],
+E: [
+ [6,"答案要 mod 10⁹+7"],
+ [9,12,"<b>全部用 getline 讀</b>：第一行是 T。不混用 <code>cin &gt;&gt;</code>，就不會有換行殘留的問題"],
+ [14,18,"讀 W N。中間的 while 是保險：如果測資有空白行就跳過"],
+ [19,"<code>bad[i][j]</code> = 第 i 條東西向道路和第 j 條南北向道路的路口是否危險。用 <code>char</code> 而不是 <code>bool</code> 的 vector，存取比較快"],
+ [20,26,"讀 W 行：每行第一個數是道路編號 row，後面有幾個數就讀幾個（可能 0 個），用 <code>while(ss &gt;&gt; col)</code> 讀到這行結束"],
+ [27,"一維 DP 陣列，dp[j] = 走到「目前這一列第 j 個路口」的走法數。dp[0] 永遠是 0，當作左邊界外"],
+ [28,34,"一列一列、從左到右填：<br>• 危險 → 0（沒有路能經過）<br>• 起點 → 1<br>• 其他 → 上面（舊的 dp[j]）+ 左邊（dp[j-1]，這一列剛算好）<br><br>第一列時「上面」都是初始的 0，所以 dp 只會從左邊累加，邏輯一致"],
+ [35,"答案 = 終點 (W, N) 的走法數"],
+],
+F: [
+ [8,"多筆測資，讀到 EOF。題目寫「輸入包含多筆測試資料」，用 <code>while(cin &gt;&gt; n)</code> 很正確"],
+ [9,"<code>time</code> 存事件 <code>(時間, ±1)</code>。名稱跟 C 的 <code>time()</code> 函式同名，這裡因為是區域變數所以沒問題"],
+ [11,15,"每筆租借拆成兩個事件：開始 <code>(f, +1)</code>、結束 <code>(e, −1)</code>"],
+ [16,"<b>整題的關鍵</b>：pair 排序先比時間，時間相同再比第二個值。−1 &lt; +1，所以<b>同一時刻先處理歸還、再處理借出</b>，剛好符合「結束時間設備可以立刻給下一位」"],
+ [17,22,"從左掃到右：遇到 +1 使用中數量加 1、遇到 −1 減 1，過程中的最大值就是同時在用的最多套數，也就是答案"],
+],
+G: [
+ [5,"<code>#define int long long</code> + <code>signed main</code>，同 D 題的習慣"],
+ [10,11,"讀 t，用 <code>while(n--)</code> 跑 t 次"],
+ [12,"用 <code>string</code> 讀數字：最多 1000 位，任何整數型別都裝不下"],
+ [13,16,"<code>sum</code> 交錯總和、<code>value</code> 正在組的 3 位數、<code>signf</code> 目前符號（+1/−1）、<code>count</code> 這組已經收了幾位"],
+ [17,"從<b>最右邊</b>（個位）往左走，因為分組是從右邊開始"],
+ [18,20,"count=0 是這組的個位、1 是十位（×10）、2 是百位（×100）。<code>input[i] - '0'</code> 把字元轉成數字"],
+ [22,28,"收滿 3 位：乘上符號加進 sum，然後重設 count、value，符號翻轉。最右邊那組是 +，下一組 −，依此類推"],
+ [30,"迴圈結束後最左邊可能剩 1~2 位還沒加，這裡補上。如果位數剛好是 3 的倍數，value 是 0，加了也沒影響"],
+ [31,32,"判斷能否被 13 整除並輸出絕對值。<code>sum</code> 是負數時 <code>sum % 13</code> 也可能是 0（例如 −26），判斷不受影響"],
+],
+};
+
+/* ================= DATA: quizzes ================= */
+const QUIZ = {
+A:[
+ {q:"某格同時是 V1 的正下方（d1=7）和 V2 的右上斜角（d2=3），它要隔離幾天？",o:["10","7","3","4"],a:1,w:"題目說不累加、取最大值，所以是 max(7, 3) = 7"},
+ {q:"你的程式用 d1 + d2 當作 V 的記號，為什麼不會跟某格的隔離天數撞在一起？",o:["因為 d1+d2 一定大於 10","因為 d2 ≥ 1，所以 d1+d2 > d1 ≥ 任何天數","因為天數一定是偶數","其實會撞到，只是範例沒測到"],a:1,w:"任何格子的天數不是 0 就是 d1 或 d2，最大是 d1；d2 ≥ 1 保證 d1+d2 嚴格大於 d1"},
+ {q:"輸出為什麼不需要在數字之間加空格？",o:["題目規定的","因為 d1 < 10，每格都是一個字元","因為 n、m 都 ≤ 100","C++ 會自動處理"],a:1,w:"天數 ≤ d1 < 10 都是個位數，V 也是一個字元，所以一格剛好一個字元"},
+],
+B:[
+ {q:"為什麼 N 是奇數時可以直接判定無解？",o:["因為題目規定","因為奇數比偶數多一個，環上必有兩個奇數相鄰，和是偶數不是質數","因為 1 不是質數","因為質數表不夠大"],a:1,w:"相鄰兩數和要是奇質數 → 必須一奇一偶交錯，環上奇偶個數要相等"},
+ {q:"DFS 裡 vis[i] = false 那一行的作用是？",o:["釋放記憶體","回溯：把 i 還回去讓其他分支能用","避免重複輸出","重設質數表"],a:1,w:"做選擇 → 遞迴 → 撤銷選擇，是回溯法的標準三步"},
+ {q:"為什麼程式的輸出順序剛好跟範例一樣？",o:["因為最後有 sort","因為 for 迴圈從小到大試數字，找到解的順序就是字典序","剛好巧合","因為用了 bitset"],a:1,w:"每一層都從小的數字開始試，所以先找到的解在字典序上一定比較小"},
+],
+C:[
+ {q:"字串 \"aaB11\" 的輸出是？",o:["Case 1: 1a","Case 1: a1","Case 1: 1aB","Case 1: empty"],a:0,w:"'1' 出現 2 次、'a' 出現 2 次、'B' 出現 1 次（1 不是質數）。ASCII：'1'=49 < 'a'=97，所以是 1a"},
+ {q:"為什麼掃 arr[0..127] 就不用另外排序？",o:["因為題目已經排好","因為下標就是 ASCII 碼，從小掃到大就是 ASCII 遞增","因為只有 26 個字母","因為 prime() 會排序"],a:1,w:"計數陣列的下標本身就有順序，這是「計數排序」的概念"},
+],
+D:[
+ {q:"為什麼 n = 6 的答案是「not the sum」？",o:["6 太小","6 = 3 + 3，但兩數要不同（差要是正數）","3 不是質數","6 是偶數"],a:1,w:"題目要求 p2 − p1 為正，3+3 差是 0 不行，其他拆法 1+5（1 不是質數）、2+4（4 不是質數）也都不行"},
+ {q:"n 是奇數時為什麼只要檢查 n−2？",o:["因為奇數的質因數只有 2","奇 = 奇 + 偶，唯一的偶質數是 2","因為 n−2 一定是質數","因為篩法只能查奇數"],a:1,w:"兩個奇質數相加是偶數，所以奇數 n 一定有一個加數是偶數，只能是 2"},
+ {q:"埃氏篩法內層迴圈為什麼從 i*i 開始？",o:["比較好寫","比 i*i 小的 i 的倍數，早就被更小的質數劃掉了","i*i 一定是質數","避免溢位"],a:1,w:"例如 i=5，10、15、20 已經被 2 或 3 劃掉，第一個需要 5 來劃的是 25"},
+],
+E:[
+ {q:"dp[i][j] = dp[i-1][j] + dp[i][j-1] 的意思是？",o:["走到 (i,j) 的最短距離","走到 (i,j) 的走法數 = 從上面來的 + 從左邊來的","(i,j) 周圍的危險路口數","從 (i,j) 到終點的走法數"],a:1,w:"只能往右、往下，所以到 (i,j) 的最後一步一定來自上方或左方"},
+ {q:"危險路口的 dp 值設成 0，效果是？",o:["程式會跳過它","沒有路線能經過它，它對後面的格子貢獻 0，等於繞開","答案變成 0","要另外 BFS"],a:1,w:"dp 值是 0 表示「到這裡的走法數為 0」，加到右邊、下面時也只會加 0"},
+ {q:"為什麼這題要用 getline 讀每一行？",o:["因為有中文","因為每條道路後面的危險路口數量不固定，可能 0 個","因為 cin 太慢","因為要讀空白"],a:1,w:"不知道一行有幾個數字，只能整行讀進來再用 stringstream 拆"},
+],
+F:[
+ {q:"事件 (6, −1) 和 (6, +1) 排序後誰在前？為什麼重要？",o:["(6,+1) 在前，先借再還","(6,−1) 在前，先還再借，才不會把剛好接續的兩筆算成重疊","隨機","沒差"],a:1,w:"pair 先比 first 再比 second，−1 < +1。題目說結束時間設備可以立刻給下一位"},
+ {q:"範例 [1,6)、[3,12)、[6,18) 的答案為什麼是 2 不是 3？",o:["題目寫錯","時間 6 第一筆剛還回來，第三筆接著用同一套","因為只看開始時間","因為 n=3"],a:1,w:"任何時刻同時在用的最多只有 2 筆"},
+],
+G:[
+ {q:"為什麼「3 位一組交錯加減」可以判斷 13 的倍數？",o:["因為 13 是質數","因為 1000 ≡ −1 (mod 13)，也就是 1001 = 7×11×13","因為 13 < 1000","巧合"],a:1,w:"n = g0 + g1·1000 + g2·1000² … ≡ g0 − g1 + g2 − … (mod 13)"},
+ {q:"1234 怎麼分組？",o:["123 | 4","1 | 234","12 | 34","1234 不用分"],a:1,w:"從右邊開始每 3 位一組，所以是 234 和 1，結果 234 − 1 = 233"},
+ {q:"這個方法也可以同時判斷哪些數的倍數？",o:["3 和 9","7 和 11","2 和 5","17 和 19"],a:1,w:"1001 = 7 × 11 × 13，所以對 7、11 也成立"},
+],
+};
+
+/* ================= helpers ================= */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function isPrimeN(v){ if(v<2) return false; if(v%2===0) return v===2; for(let i=3;i*i<=v;i+=2) if(v%i===0) return false; return true; }
+function opts(sel, from, to, val){ const el=$(sel); el.innerHTML=""; for(let i=from;i<=to;i++){ const o=document.createElement("option"); o.value=i; o.textContent=i; if(i===val) o.selected=true; el.appendChild(o);} }
+
+/* ================= routing ================= */
+const VIEWS = ["overview","prob-a","prob-b","prob-c","prob-d","prob-e","prob-f","prob-g","cheatsheet"];
+function route(){
+  let h = (location.hash||"").slice(1); if(!VIEWS.includes(h)) h = "overview";
+  $$(".view").forEach(v=>v.classList.toggle("on", v.id==="v-"+h));
+  $$("#nav a").forEach(a=>a.classList.toggle("active", a.dataset.v===h));
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange", route);
+
+/* ================= tabs ================= */
+const TABNAMES = ["題目重點","互動演示","解法拆解","你的程式碼","小測驗"];
+$$(".tabs").forEach(t=>{
+  const k = t.dataset.for;
+  TABNAMES.forEach((name,i)=>{
+    const b=document.createElement("button");
+    b.textContent = (k==="e" && i===3) ? "參考解" : name;
+    b.onclick=()=>{ t.querySelectorAll("button").forEach(x=>x.classList.remove("on")); b.classList.add("on");
+      t.parentElement.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on", p.dataset.p===k+"-"+(i+1))); };
+    t.appendChild(b);
+    if(i===0) b.click();
+  });
+});
+
+/* ================= overview cards ================= */
+const OV = [
+ ["A","prob-a","Quarantine Policy","模擬 · 二維陣列","座位圖上 V 周圍 8 格標隔離天數，取最大值","範例通過"],
+ ["B","prob-b","Bidirectional Number Ring","回溯 · 剪枝 · 奇偶性","1~N 排成環，相鄰和為質數，列出所有解","範例通過"],
+ ["C","prob-c","Counting the Primes","計數陣列 · 質數判斷","次數是質數的字元按 ASCII 輸出","範例通過"],
+ ["D","prob-d","Goldbach and Euler","埃氏篩法 · bitset","n 拆成兩個不同質數之和，差最小","範例通過"],
+ ["E","prob-e","Falling in Love","格子路徑 DP","只能右、下走，避開危險路口的走法數","還沒寫"],
+ ["F","prob-f","Equipments of Kitchen","掃描線 · 排序","最多同時幾筆租借 = 最少設備數","範例通過"],
+ ["G","prob-g","Counterfeit Money","字串大數 · 同餘","3 位一組交錯加減判斷 13 的倍數","範例通過"],
+];
+$("#ovcards").innerHTML = OV.map(([L,id,t,tag,d,st])=>`<div class="card ovcard" onclick="location.hash='${id}'"><h3><span class="letter">${L}</span>${t}</h3><span class="pill">${tag}</span><span class="pill ${st==="範例通過"?"ok":"warn"}">${st}</span><p style="color:var(--dim);margin-top:8px">${d}</p></div>`).join("");
+
+/* ================= code viewer ================= */
+const KW = /\b(int|long|bool|char|void|return|for|while|if|else|const|using|namespace|auto|signed|break|continue|true|false)\b/;
+function hlLine(line){
+  const re = /(\/\/.*$)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(^\s*#\s*\w+)|\b(int|long|bool|char|void|return|for|while|if|else|const|using|namespace|auto|signed|break|continue|true|false)\b|\b(vector|string|pair|bitset|stringstream|cin|cout|endl|std|max|abs|sort|getline|stoi)\b|\b(\d+[LlUu]*)\b/g;
+  let out="", last=0, m;
+  while((m=re.exec(line))){
+    out += esc(line.slice(last, m.index));
+    const s = esc(m[0]);
+    if(m[1]) out += `<span class="cm">${s}</span>`;
+    else if(m[2]) out += `<span class="st">${s}</span>`;
+    else if(m[3]) out += `<span class="pp">${s}</span>`;
+    else if(m[4]) out += `<span class="kw">${s}</span>`;
+    else if(m[5]) out += `<span class="ty">${s}</span>`;
+    else out += `<span class="nu">${s}</span>`;
+    last = re.lastIndex;
+    if(m[0].length===0) re.lastIndex++;
+  }
+  // preprocessor include target
+  out += esc(line.slice(last));
+  return out || " ";
+}
+function buildCode(key){
+  const host = document.querySelector(`[data-code="${key}"]`);
+  const src = document.getElementById("src-"+key).textContent.replace(/^\n/,"");
+  const lines = src.split("\n");
+  const notes = NOTES[key].map(n=> n.length===2 ? [n[0],n[0],n[1]] : n);
+  const codeEl = document.createElement("div"); codeEl.className="code";
+  const ex = document.createElement("div"); ex.className="explain";
+  const hasNote = new Set(); notes.forEach(([s,e])=>{ for(let i=s;i<=e;i++) hasNote.add(i); });
+  lines.forEach((ln,i)=>{
+    const d=document.createElement("div"); d.className="ln"+(hasNote.has(i+1)?" has":""); d.dataset.n=i+1;
+    d.innerHTML=`<span class="no">${i+1}</span><span>${hlLine(ln)}</span>`;
+    codeEl.appendChild(d);
+  });
+  let cur = -1;
+  function show(idx){
+    cur = idx;
+    codeEl.querySelectorAll(".ln").forEach(l=>l.classList.remove("sel"));
+    if(idx<0){ ex.innerHTML = `<div class="hint">點左邊任何一行（有 ● 的行有解說），或用下面的按鈕一段一段看</div>`; ex.appendChild(nav); return; }
+    const [s,e,t] = notes[idx];
+    for(let i=s;i<=e;i++) codeEl.querySelector(`.ln[data-n="${i}"]`)?.classList.add("sel");
+    ex.innerHTML = `<div class="lnr">第 ${s}${e!==s?" – "+e:""} 行　·　${idx+1} / ${notes.length}</div><div style="margin-top:8px">${t}</div>`;
+    ex.appendChild(nav);
+    const first = codeEl.querySelector(`.ln[data-n="${s}"]`);
+    if(first){ const top = first.offsetTop - codeEl.offsetTop - 40; if(top < codeEl.scrollTop || top > codeEl.scrollTop + codeEl.clientHeight - 80) codeEl.scrollTo({top, behavior:"smooth"}); }
+  }
+  const nav = document.createElement("div"); nav.className="navbtns";
+  const prev = document.createElement("button"); prev.className="b"; prev.textContent="← 上一段";
+  const next = document.createElement("button"); next.className="b pri"; next.textContent="下一段 →";
+  prev.onclick=()=>show(Math.max(0,cur-1)); next.onclick=()=>show(Math.min(notes.length-1,cur+1));
+  nav.append(prev,next);
+  codeEl.addEventListener("click", ev=>{
+    const l = ev.target.closest(".ln"); if(!l) return;
+    const n = +l.dataset.n;
+    // choose the narrowest note containing this line
+    let best=-1, bw=1e9;
+    notes.forEach(([s,e],i)=>{ if(n>=s && n<=e && e-s<bw){ bw=e-s; best=i; } });
+    if(best<0){ codeEl.querySelectorAll(".ln").forEach(x=>x.classList.remove("sel")); l.classList.add("sel");
+      ex.innerHTML=`<div class="lnr">第 ${n} 行</div><div class="hint" style="margin-top:8px">這行比較單純，沒有特別要說明的</div>`; ex.appendChild(nav); return; }
+    show(best);
+  });
+  host.append(codeEl, ex);
+  show(-1);
+}
+["A","B","C","D","E","F","G"].forEach(buildCode);
+
+/* ================= quizzes ================= */
+$$("[data-quiz]").forEach(host=>{
+  QUIZ[host.dataset.quiz].forEach((it,qi)=>{
+    const q=document.createElement("div"); q.className="q";
+    q.innerHTML=`<div><b>Q${qi+1}.</b> ${it.q}</div><div class="opts"></div><div class="why"></div>`;
+    const box=q.querySelector(".opts");
+    it.o.forEach((o,oi)=>{
+      const b=document.createElement("button"); b.className="opt"; b.textContent=String.fromCharCode(65+oi)+". "+o;
+      b.onclick=()=>{
+        if(q.classList.contains("done")) return;
+        q.classList.add("done");
+        b.classList.add(oi===it.a?"right":"wrong");
+        box.children[it.a].classList.add("right");
+        q.querySelector(".why").innerHTML=(oi===it.a?"<b class='yes'>答對了</b>　":"<b class='no'>再想想</b>　")+it.w+` <button class="b" style="margin-left:8px;padding:2px 10px">重做</button>`;
+        q.querySelector(".why button").onclick=()=>{ q.classList.remove("done"); [...box.children].forEach(c=>c.classList.remove("right","wrong")); };
+      };
+      box.appendChild(b);
+    });
+    host.appendChild(q);
+  });
+});
+
+/* ================= A demo ================= */
+(function(){
+  let n=4,m=4,d1=7,d2=3, g=[];
+  const sample=[".V..","....","..V.","...."];
+  opts("#a-n",1,12,n); opts("#a-m",1,14,m); opts("#a-d1",1,9,d1); opts("#a-d2",1,9,d2);
+  function resize(){ const ng=[]; for(let i=0;i<n;i++){ ng.push([]); for(let j=0;j<m;j++) ng[i].push(g[i]?.[j]||false);} g=ng; }
+  function loadSample(){ n=4;m=4;d1=7;d2=3; $("#a-n").value=4;$("#a-m").value=4;$("#a-d1").value=7;$("#a-d2").value=3; g=sample.map(r=>[...r].map(c=>c==="V")); render(); }
+  function compute(){
+    const out=[]; const src=[];
+    for(let i=0;i<n;i++){ out.push(Array(m).fill(0)); src.push(Array.from({length:m},()=>[])); }
+    for(let i=0;i<n;i++)for(let j=0;j<m;j++) if(g[i][j]){
+      for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){ if(!dx&&!dy) continue; const x=i+dx,y=j+dy; if(x<0||y<0||x>=n||y>=m) continue;
+        const d=(dx===0||dy===0)?d1:d2; src[x][y].push([i,j,d]); out[x][y]=Math.max(out[x][y],d); }
+    }
+    return {out,src};
+  }
+  function render(){
+    const {out,src}=compute();
+    const gin=$("#a-in"), go=$("#a-out");
+    gin.style.gridTemplateColumns=go.style.gridTemplateColumns=`repeat(${m},34px)`;
+    gin.innerHTML=""; go.innerHTML="";
+    for(let i=0;i<n;i++)for(let j=0;j<m;j++){
+      const c=document.createElement("div"); c.className="seat"+(g[i][j]?" v":""); c.textContent=g[i][j]?"V":".";
+      c.onclick=()=>{ g[i][j]=!g[i][j]; render(); }; gin.appendChild(c);
+      const o=document.createElement("div"); const v=out[i][j];
+      o.className="seat ro "+(g[i][j]?"v":(v===0?"":(v===d1?"d1":"d2")));
+      if(!g[i][j] && v===d1 && d1===d2) o.className="seat ro d1";
+      o.textContent=g[i][j]?"V":v; o.dataset.i=i; o.dataset.j=j;
+      o.onmouseenter=()=>{
+        go.querySelectorAll(".seat").forEach(s=>s.classList.remove("hl"));
+        if(g[i][j]){ $("#a-why").textContent=`(${i+1},${j+1}) 是確診者`; return; }
+        const s=src[i][j];
+        if(!s.length){ $("#a-why").textContent=`(${i+1},${j+1}) 周圍沒有 V → 0`; return; }
+        s.forEach(([x,y])=>go.children[x*m+y].classList.add("hl"));
+        $("#a-why").innerHTML=`(${i+1},${j+1}) 受 ${s.map(([x,y,d])=>`(${x+1},${y+1})→${d}`).join("、")} 影響 → max = <b>${v}</b>`;
+      };
+      go.appendChild(o);
+    }
+    let txt="Airplane #1:\n"; for(let i=0;i<n;i++){ for(let j=0;j<m;j++) txt+=g[i][j]?"V":out[i][j]; txt+="\n"; }
+    $("#a-text").textContent=txt;
+  }
+  ["#a-n","#a-m","#a-d1","#a-d2"].forEach(s=>$(s).onchange=()=>{
+    n=+$("#a-n").value; m=+$("#a-m").value; d1=+$("#a-d1").value; d2=+$("#a-d2").value;
+    if(d2>d1){ d2=d1; $("#a-d2").value=d2; $("#a-why").textContent="題目限制 d2 ≤ d1，已自動調整"; }
+    resize(); render(); });
+  $("#a-s1").onclick=loadSample;
+  $("#a-clear").onclick=()=>{ g=g.map(r=>r.map(()=>false)); render(); };
+  $("#a-rand").onclick=()=>{ g=g.map(r=>r.map(()=>Math.random()<.15)); render(); };
+  loadSample();
+})();
+
+/* ================= B demo ================= */
+(function(){
+  let N=6, gen=null, steps=0, found=[], timer=null, state={arr:[1],tryPos:0,tryVal:0,bad:false,close:null}, logs=[];
+  opts("#b-n",2,12,6);
+  function* dfsGen(N){
+    const ans=[0,1], vis=[]; vis[1]=true;
+    function* rec(pos){
+      if(pos===N+1){ const s=ans[N]+1, ok=isPrimeN(s); yield {t:"close",ok,sum:s,arr:ans.slice(1,N+1)}; if(ok) yield {t:"found",arr:ans.slice(1,N+1)}; return; }
+      for(let i=2;i<=N;i++){
+        if(vis[i]) continue;
+        const s=ans[pos-1]+i;
+        if(!isPrimeN(s)){ yield {t:"reject",pos,val:i,sum:s,prev:ans[pos-1],arr:ans.slice(1,pos)}; continue; }
+        vis[i]=true; ans[pos]=i;
+        yield {t:"place",pos,val:i,sum:s,prev:ans[pos-1],arr:ans.slice(1,pos+1)};
+        yield* rec(pos+1);
+        vis[i]=false; ans[pos]=0;
+        yield {t:"back",pos,val:i,arr:ans.slice(1,pos)};
+      }
+    }
+    yield* rec(2); yield {t:"done"};
+  }
+  function reset(){
+    stop(); N=+$("#b-n").value; steps=0; found=[]; logs=[]; state={arr:[1],tryPos:0,tryVal:0,bad:false,close:null};
+    const odd = N%2===1 && !$("#b-odd").checked;
+    gen = odd ? null : dfsGen(N);
+    if(odd){ logs.push("N 是奇數 → 你的程式第 48 行直接跳過 DFS，沒有任何解（勾「奇數也硬跑」可以看它真的找不到）"); }
+    else logs.push("開始：第 1 格固定放 1，呼叫 dfs(2)");
+    draw();
+  }
+  function stepOnce(){
+    if(!gen) return false;
+    while(true){
+      const r=gen.next(); if(r.done) { gen=null; return false; }
+      const e=r.value; steps++;
+      state.close=null; state.bad=false;
+      if(e.t==="reject"){ state.arr=e.arr; state.tryPos=e.pos; state.tryVal=e.val; state.bad=true;
+        if(!$("#b-rej").checked) continue;
+        logs.push(`第 ${e.pos} 格試 ${e.val}：${e.prev}+${e.val}=${e.sum} 不是質數 ✗`); }
+      else if(e.t==="place"){ state.arr=e.arr; state.tryPos=0; logs.push(`第 ${e.pos} 格放 ${e.val}：${e.prev}+${e.val}=${e.sum} 是質數 ✓ → dfs(${e.pos+1})`); }
+      else if(e.t==="back"){ state.arr=e.arr; state.tryPos=0; logs.push(`↩ 回溯：拿掉第 ${e.pos} 格的 ${e.val}，回到第 ${e.pos} 格試下一個`); }
+      else if(e.t==="close"){ state.arr=e.arr; state.close=e.ok; logs.push(`全部填滿！檢查接口 ${e.arr[e.arr.length-1]}+1=${e.sum} ${e.ok?"是質數 ✓":"不是質數 ✗ 放棄"}`); }
+      else if(e.t==="found"){ found.push(e.arr); logs.push(`★ 找到第 ${found.length} 個解：${e.arr.join(" ")}`); draw(); return "found"; }
+      else if(e.t==="done"){ logs.push(`DFS 結束，共 ${found.length} 個解`); gen=null; draw(); return false; }
+      draw(); return true;
+    }
+  }
+  function draw(){
+    const svg=$("#b-svg"), R=135, cx=180, cy=180, r=Math.max(16, Math.min(26, 150/N));
+    const pos=i=>{ const a=-Math.PI/2 + 2*Math.PI*i/N; return [cx+R*Math.cos(a), cy+R*Math.sin(a)]; };
+    let h="";
+    const arr=state.arr;
+    for(let i=0;i<N;i++){
+      const [x1,y1]=pos(i),[x2,y2]=pos((i+1)%N);
+      let col="#272d3b", w=2;
+      if(i+1<arr.length){ col="#9ece6a"; w=3; }
+      if(i===N-1 && arr.length===N){ col = state.close===false?"#f7768e":(state.close?"#9ece6a":"#272d3b"); w=3; }
+      if(state.bad && state.tryPos && i===state.tryPos-2){ col="#f7768e"; w=3; }
+      h+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="${w}"/>`;
+      if(i+1<arr.length || (i===N-1&&arr.length===N)){ const s=arr[i]+(i===N-1?arr[0]:arr[i+1]); h+=`<text x="${(x1+x2)/2*1.0+((x1+x2)/2-cx)*0.13}" y="${(y1+y2)/2+((y1+y2)/2-cy)*0.13+4}" fill="#5b6377" font-size="11" text-anchor="middle" font-family="JetBrains Mono, monospace">${s}</text>`; }
+    }
+    for(let i=0;i<N;i++){
+      const [x,y]=pos(i); let v=arr[i], fill="#161a24", stroke="#343c4f", tc="#dfe3ec";
+      if(v!==undefined){ fill="#1d2230"; stroke="#7aa2f7"; }
+      if(v!==undefined && i===arr.length-1 && i>0 && !state.bad){ fill="#16314a"; stroke="#7dcfff"; }
+      if(state.bad && i===state.tryPos-1){ v=state.tryVal; fill="#2a1520"; stroke="#f7768e"; tc="#ffb3c1"; }
+      h+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="2"/>`;
+      h+=`<text x="${x}" y="${y+5}" fill="${tc}" font-size="${r>20?15:13}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-weight="600">${v===undefined?"":v}</text>`;
+      h+=`<text x="${cx+(x-cx)*1.24}" y="${cy+(y-cy)*1.24+4}" fill="#5b6377" font-size="10" text-anchor="middle">#${i+1}</text>`;
+    }
+    svg.innerHTML=h;
+    $("#b-steps").textContent=steps; $("#b-found").textContent=found.length; $("#b-depth").textContent=arr.length;
+    $("#b-arr").textContent="[ "+arr.join(" ")+(arr.length<N?" _".repeat(N-arr.length):"")+" ]";
+    const lg=$("#b-log"); lg.innerHTML=logs.slice(-60).map((l,i,a)=>`<div class="${i===a.length-1?"cur":""}">${esc(l)}</div>`).join(""); lg.scrollTop=lg.scrollHeight;
+    $("#b-sols").innerHTML = `<div style="color:var(--dim)">Case 1:</div>` + (found.length? found.map(a=>`<div>${a.join(" ")}</div>`).join("") : `<div style="color:var(--faint)">（還沒找到）</div>`);
+  }
+  function stop(){ if(timer){ clearInterval(timer); timer=null; } $("#b-play").textContent="▶ 自動播放"; }
+  $("#b-step").onclick=()=>{ stop(); stepOnce(); };
+  $("#b-play").onclick=()=>{ if(timer){ stop(); return; } $("#b-play").textContent="⏸ 暫停";
+    const tick=()=>{ const r=stepOnce(); if(r===false) stop(); };
+    timer=setInterval(tick, +$("#b-speed").value); };
+  $("#b-speed").oninput=()=>{ if(timer){ stop(); $("#b-play").click(); } };
+  $("#b-next").onclick=()=>{ stop(); let guard=0; while(gen && guard++<2e6){ const r=stepOnce(); if(r==="found"||r===false) break; } draw(); };
+  $("#b-reset").onclick=reset; $("#b-n").onchange=reset; $("#b-odd").onchange=reset;
+  $("#b-count").onclick=()=>{
+    const rows=[];
+    for(let n=2;n<=16;n++){
+      let cnt=0;
+      if(n%2===0){
+        const vis=new Array(n+1).fill(false), ans=new Array(n+1).fill(0); ans[1]=1; vis[1]=true;
+        const P=[]; for(let i=0;i<40;i++) P.push(isPrimeN(i));
+        (function rec(p){ if(p===n+1){ if(P[ans[n]+1]) cnt++; return; } for(let i=2;i<=n;i++) if(!vis[i]&&P[ans[p-1]+i]){ vis[i]=true; ans[p]=i; rec(p+1); vis[i]=false; } })(2);
+      }
+      rows.push([n,cnt]);
+    }
+    $("#b-counttbl").innerHTML=`<table class="t"><tr><th>N</th>${rows.map(r=>`<td class="mono">${r[0]}</td>`).join("")}</tr><tr><th>解數</th>${rows.map(r=>`<td class="mono" style="color:${r[1]?"var(--ok)":"var(--faint)"}">${r[1]}</td>`).join("")}</tr></table><p style="color:var(--dim);font-size:13px">奇數全部是 0，驗證了奇偶性剪枝。解數都是偶數（N=2 除外），因為每個解倒過來讀也是一個解</p>`;
+  };
+  reset();
+})();
+
+/* ================= C demo ================= */
+(function(){
+  function render(){
+    const s=$("#c-in").value.replace(/[^0-9A-Za-z]/g,"");
+    const cnt=new Array(128).fill(0); for(const ch of s) cnt[ch.charCodeAt(0)]++;
+    const items=[]; for(let i=0;i<128;i++) if(cnt[i]) items.push([i,cnt[i]]);
+    const mx=Math.max(1,...items.map(x=>x[1]));
+    $("#c-bars").innerHTML=items.map(([c,k])=>`<div class="bar ${isPrimeN(k)?"p":""}"><span class="cnt">${k}</span><div class="col" style="height:${Math.max(4,k/mx*150)}px"></div></div>`).join("") || `<span style="color:var(--faint)">（輸入只能是英數字）</span>`;
+    $("#c-lbl").innerHTML=items.map(([c])=>`<span>${String.fromCharCode(c)}<small>${c}</small></span>`).join("");
+    const res=items.filter(([c,k])=>isPrimeN(k)).map(([c])=>String.fromCharCode(c)).join("");
+    $("#c-out").textContent="Case 1: "+(res||"empty");
+  }
+  $("#c-in").oninput=render;
+  $$("[data-cs]").forEach(b=>b.onclick=()=>{ $("#c-in").value=b.dataset.cs; render(); });
+  render();
+})();
+
+/* ================= D demo ================= */
+(function(){
+  const LIM=100; let comp, p, j, phase, timer=null, msg="";
+  function reset(){ stop(); comp=new Array(LIM+1).fill(false); comp[0]=comp[1]=true; p=1; j=0; phase="find"; msg="按「下一步」開始。1 不是質數，先劃掉"; draw(null); }
+  function step(){
+    if(phase==="done") return false;
+    if(phase==="find"){
+      p++; while(p*p<=LIM && comp[p]) p++;
+      if(p*p>LIM){ phase="done"; msg=`p = ${p}，p×p = ${p*p} > ${LIM}，外層結束。剩下沒被劃掉的全部是質數`; draw(null); return false; }
+      j=p*p; phase="cross"; msg=`${p} 沒被劃掉 → 是質數。從 ${p}×${p} = ${p*p} 開始，每次 +${p} 劃掉倍數`; draw(null); return true;
+    }
+    if(phase==="cross"){
+      const already=comp[j]; comp[j]=true; msg=`劃掉 ${j}（${p} 的倍數）${already?"　← 之前已經被劃過了":""}`; const hit=j; j+=p; if(j>LIM) phase="find"; draw(hit); return true;
+    }
+  }
+  function draw(hit){
+    const el=$("#d-sieve"); let h="";
+    for(let i=1;i<=LIM;i++){
+      let c="";
+      if(i===hit) c="hit";
+      else if(phase==="cross" && i===p) c="cur";
+      else if(comp[i]) c="x";
+      else if(i<=p || phase==="done") c="p";
+      h+=`<div class="${c}">${i}</div>`;
+    }
+    el.innerHTML=h; $("#d-smsg").textContent=msg;
+  }
+  function stop(){ if(timer){ clearInterval(timer); timer=null; } $("#d-splay").textContent="▶ 自動播放"; }
+  $("#d-sstep").onclick=()=>{ stop(); step(); };
+  $("#d-splay").onclick=()=>{ if(timer){ stop(); return; } $("#d-splay").textContent="⏸ 暫停"; timer=setInterval(()=>{ if(step()===false) stop(); },260); };
+  $("#d-sreset").onclick=reset;
+  reset();
+
+  function go(){
+    const n=parseInt($("#d-n").value,10);
+    const out=$("#d-res");
+    if(!(n>0 && n<=100000000)){ out.innerHTML=`<div class="note bad">請輸入 1 ~ 100000000 的整數</div>`; return; }
+    let rows=[], a1=-1, a2=-1, tries=0;
+    if(n%2){
+      const ok = n>2 && isPrimeN(n-2);
+      rows.push([2,n-2,true,n>2&&isPrimeN(n-2)]); if(ok){a1=2;a2=n-2;}
+      out.innerHTML=`<div class="note">n = ${n} 是<b>奇數</b> → 只能是 2 + ${n-2}，只要檢查 ${n-2} 是不是質數</div>`;
+    } else {
+      let start=Math.floor(n/2)-1; if(start%2===0) start--;
+      out.innerHTML=`<div class="note">n = ${n} 是<b>偶數</b> → p1 從 n/2 − 1 = ${Math.floor(n/2)-1}${(Math.floor(n/2)-1)%2===0?`，是偶數再減 1 → ${start}`:""} 開始，每次 −2 往下找</div>`;
+      for(let i=start;i>=3;i-=2){ tries++; const A=isPrimeN(i), B=isPrimeN(n-i); rows.push([i,n-i,A,B]); if(A&&B){a1=i;a2=n-i;break;} }
+    }
+    const show=rows.length>30? rows.slice(0,12).concat([null]).concat(rows.slice(-12)) : rows;
+    out.innerHTML += `<table class="t"><tr><th>p1</th><th>p2 = n − p1</th><th>p1 質數？</th><th>p2 質數？</th></tr>${show.map(r=> r===null? `<tr><td colspan="4" style="color:var(--faint)">…（中間省略 ${rows.length-24} 列）…</td></tr>` : `<tr class="${r[2]&&r[3]?"found":""}"><td class="mono">${r[0]}</td><td class="mono">${r[1]}</td><td>${r[2]?"<span class=yes>✓</span>":"<span class=no>✗</span>"}</td><td>${r[3]?"<span class=yes>✓</span>":"<span class=no>✗</span>"}</td></tr>`).join("")}</table>`;
+    out.innerHTML += `<pre class="io">${a1<0? `${n} is not the sum of two primes!` : `${n} is the sum of ${a1} and ${a2}.`}</pre>` + (n%2===0? `<p style="color:var(--dim);font-size:13px">共試了 ${tries} 個候選 p1</p>`:"");
+  }
+  $("#d-go").onclick=go; $("#d-n").onkeydown=e=>{ if(e.key==="Enter") go(); };
+  $$("[data-dn]").forEach(b=>b.onclick=()=>{ $("#d-n").value=b.dataset.dn; go(); });
+  go();
+})();
+
+/* ================= E demo ================= */
+(function(){
+  let W=4,N=5, bad=new Set(), animT=null, shown=null;
+  opts("#e-w",1,10,4); opts("#e-n",1,10,5);
+  const key=(i,j)=>i+","+j;
+  function dpAll(){ const dp=[]; for(let i=0;i<=W;i++) dp.push(new Array(N+1).fill(0));
+    for(let i=1;i<=W;i++)for(let j=1;j<=N;j++){ if(bad.has(key(i,j))) dp[i][j]=0; else if(i===1&&j===1) dp[i][j]=1; else dp[i][j]=(dp[i-1][j]+dp[i][j-1])%1000000007; } return dp; }
+  function draw(){
+    const dp=dpAll(), gap=58, pad=46, w=pad*2+gap*(N-1), h=pad*2+gap*(W-1);
+    const svg=$("#e-svg"); svg.setAttribute("viewBox",`0 0 ${w} ${h}`);
+    const X=j=>pad+(j-1)*gap, Y=i=>pad+(i-1)*gap;
+    let s="";
+    for(let i=1;i<=W;i++) s+=`<line x1="${X(1)-18}" y1="${Y(i)}" x2="${X(N)+18}" y2="${Y(i)}" stroke="#2a3142" stroke-width="6" stroke-linecap="round"/><text x="${X(1)-30}" y="${Y(i)+4}" fill="#5b6377" font-size="11" text-anchor="end">${i}</text>`;
+    for(let j=1;j<=N;j++) s+=`<line x1="${X(j)}" y1="${Y(1)-18}" x2="${X(j)}" y2="${Y(W)+18}" stroke="#2a3142" stroke-width="6" stroke-linecap="round"/><text x="${X(j)}" y="${Y(1)-26}" fill="#5b6377" font-size="11" text-anchor="middle">${j}</text>`;
+    for(let i=1;i<=W;i++)for(let j=1;j<=N;j++){
+      const b=bad.has(key(i,j)); const vis = shown===null || (i<shown[0] || (i===shown[0] && j<=shown[1]));
+      const isCur = shown && i===shown[0] && j===shown[1];
+      const v=dp[i][j];
+      let fill=b?"#4a1d2a":(v>0&&vis?"#1d2a44":"#161a24"), stroke=b?"#f7768e":(isCur?"#7dcfff":(v>0&&vis?"#7aa2f7":"#343c4f"));
+      if((i===1&&j===1)||(i===W&&j===N)) if(!b) stroke = i===1?"#9ece6a":"#e0af68";
+      s+=`<g class="ecell" data-i="${i}" data-j="${j}" style="cursor:pointer"><circle cx="${X(j)}" cy="${Y(i)}" r="19" fill="${fill}" stroke="${stroke}" stroke-width="${isCur?3:2}"/>`;
+      s+=`<text x="${X(j)}" y="${Y(i)+4}" text-anchor="middle" font-size="${String(v).length>3?10:12}" font-family="JetBrains Mono, monospace" font-weight="600" fill="${b?"#ffb3c1":"#dfe3ec"}">${b?"✕":(vis?v:"")}</text></g>`;
+    }
+    s+=`<text x="${X(1)}" y="${Y(1)-38}" fill="#9ece6a" font-size="11" text-anchor="middle">起點</text><text x="${X(N)}" y="${Y(W)+40}" fill="#e0af68" font-size="11" text-anchor="middle">寶藏</text>`;
+    svg.innerHTML=s;
+    $("#e-ans").textContent=dp[W][N];
+    svg.querySelectorAll(".ecell").forEach(g=>{
+      const i=+g.dataset.i, j=+g.dataset.j;
+      g.onclick=()=>{ stopAnim(); const k=key(i,j); bad.has(k)?bad.delete(k):bad.add(k); draw(); };
+      g.onmouseenter=()=>{
+        const k=key(i,j);
+        if(bad.has(k)) $("#e-why").innerHTML=`(${i},${j}) 危險 → dp = 0`;
+        else if(i===1&&j===1) $("#e-why").innerHTML=`(1,1) 起點 → dp = 1`;
+        else $("#e-why").innerHTML=`dp(${i},${j}) = 上 dp(${i-1},${j}) <b>${i>1?dp[i-1][j]:0}</b> + 左 dp(${i},${j-1}) <b>${j>1?dp[i][j-1]:0}</b> = <b style="color:var(--acc)">${dp[i][j]}</b>`;
+      };
+    });
+  }
+  function stopAnim(){ if(animT){ clearInterval(animT); animT=null; } shown=null; $("#e-anim").textContent="▶ 動畫填表"; }
+  $("#e-anim").onclick=()=>{ if(animT){ stopAnim(); draw(); return; } shown=[1,0]; $("#e-anim").textContent="⏹ 停止";
+    animT=setInterval(()=>{ let [i,j]=shown; j++; if(j>N){ i++; j=1; } if(i>W){ stopAnim(); draw(); return; } shown=[i,j];
+      const dp=dpAll(); $("#e-why").innerHTML = bad.has(key(i,j))? `(${i},${j}) 危險 → 0` : (i===1&&j===1? "起點 = 1" : `dp(${i},${j}) = ${i>1?dp[i-1][j]:0} + ${j>1?dp[i][j-1]:0} = ${dp[i][j]}`); draw(); }, 420); };
+  function setWN(w,n){ W=w;N=n; $("#e-w").value=w; $("#e-n").value=n; }
+  $("#e-w").onchange=$("#e-n").onchange=()=>{ stopAnim(); W=+$("#e-w").value; N=+$("#e-n").value; bad=new Set([...bad].filter(k=>{const [i,j]=k.split(",").map(Number); return i<=W&&j<=N;})); draw(); };
+  $("#e-s1").onclick=()=>{ stopAnim(); setWN(4,5); bad=new Set(["2,2","3,3","3,5"]); draw(); };
+  $("#e-s2").onclick=()=>{ stopAnim(); setWN(5,5); bad=new Set(["2,1","2,2","2,3","2,4","3,1","3,2","3,3","4,1","4,2","4,3","4,5","5,1","5,2","5,3"]); draw(); };
+  $("#e-clear").onclick=()=>{ stopAnim(); bad=new Set(); draw(); };
+  $("#e-s1").click();
+})();
+
+/* ================= F demo ================= */
+(function(){
+  let iv=[], ev=[], k=0, cnt=0, mx=0, timer=null, assign=[], maxAt=-1;
+  function parse(){
+    const nums=$("#f-in").value.trim().split(/\s+/).map(Number).filter(x=>!isNaN(x));
+    iv=[]; for(let i=0;i+1<nums.length;i+=2) if(nums[i]<nums[i+1]) iv.push([nums[i],nums[i+1]]);
+    iv=iv.slice(0,16);
+    ev=[]; iv.forEach(([s,d],i)=>{ ev.push([s,1,i]); ev.push([d,-1,i]); });
+    ev.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+    // greedy assignment
+    const order=iv.map((x,i)=>i).sort((a,b)=>iv[a][0]-iv[b][0]); const free=[]; assign=new Array(iv.length);
+    order.forEach(i=>{ let best=-1; for(let s=0;s<free.length;s++) if(free[s]<=iv[i][0] && (best<0||free[s]<free[best])) best=s; if(best<0){ free.push(iv[i][1]); assign[i]=free.length-1; } else { free[best]=iv[i][1]; assign[i]=best; } });
+    k=0; cnt=0; mx=0; maxAt=-1; stop(); draw();
+  }
+  const COLORS=["#7aa2f7","#bb9af7","#9ece6a","#e0af68","#7dcfff","#ff9e64","#f7768e","#2ac3de","#c0caf5","#73daca"];
+  function draw(){
+    const svg=$("#f-svg"); if(!iv.length){ svg.innerHTML=""; $("#f-ev").innerHTML="<span style='color:var(--faint)'>沒有合法的區間</span>"; return; }
+    const tmin=Math.min(...iv.map(x=>x[0])), tmax=Math.max(...iv.map(x=>x[1]));
+    const W=760, L=40, R=20, rowH=26, H=iv.length*rowH+56;
+    svg.setAttribute("viewBox",`0 0 ${W} ${H}`); svg.style.width="100%"; svg.style.minWidth="520px";
+    const X=t=>L+(t-tmin)/(tmax-tmin||1)*(W-L-R);
+    let s="";
+    const ticks=new Set(); iv.forEach(([a,b])=>{ticks.add(a);ticks.add(b);});
+    [...ticks].forEach(t=>{ s+=`<line x1="${X(t)}" y1="14" x2="${X(t)}" y2="${H-26}" stroke="#1d2230"/><text x="${X(t)}" y="${H-10}" fill="#5b6377" font-size="10" text-anchor="middle" font-family="JetBrains Mono, monospace">${t}</text>`; });
+    const curT = k>0 ? ev[k-1][0] : null;
+    iv.forEach(([a,b],i)=>{
+      const y=18+i*rowH; const active = curT!==null && a<=curT && curT<b && ev.slice(0,k).some(e=>e[2]===i&&e[1]===1) && !ev.slice(0,k).some(e=>e[2]===i&&e[1]===-1);
+      const c=COLORS[assign[i]%COLORS.length];
+      s+=`<rect x="${X(a)}" y="${y}" width="${Math.max(2,X(b)-X(a))}" height="18" rx="4" fill="${c}" opacity="${active?0.95:0.28}"/>`;
+      s+=`<text x="${X(a)+5}" y="${y+13}" font-size="11" fill="${active?"#0d0f14":"#dfe3ec"}" font-family="JetBrains Mono, monospace">[${a},${b})  #${assign[i]+1}</text>`;
+      s+=`<text x="${L-8}" y="${y+13}" font-size="10" fill="#5b6377" text-anchor="end">${i+1}</text>`;
+    });
+    if(curT!==null) s+=`<line x1="${X(curT)}" y1="8" x2="${X(curT)}" y2="${H-24}" stroke="#7dcfff" stroke-width="2" stroke-dasharray="4 3"/>`;
+    svg.innerHTML=s;
+    $("#f-ev").innerHTML=ev.map((e,i)=>`<span class="ev ${e[1]>0?"s":"e"} ${i===k-1?"cur":""} ${i<k-1?"past":""}">(${e[0]}, ${e[1]>0?"+1":"−1"})</span>`).join("");
+    $("#f-cnt").textContent=cnt; $("#f-max").textContent=mx;
+  }
+  function step(){
+    if(k>=ev.length){ $("#f-msg").innerHTML=`掃描結束，最大同時使用量 = <b>${mx}</b> → 至少準備 ${mx} 套設備`; return false; }
+    const e=ev[k++]; cnt+=e[1]; const nm=cnt>mx; if(nm){ mx=cnt; maxAt=k-1; }
+    $("#f-msg").innerHTML=`時間 ${e[0]}：第 ${e[2]+1} 筆${e[1]>0?"開始使用 → count +1":"歸還 → count −1"}，現在 ${cnt} 套在用${nm?"　<b style='color:var(--warn)'>新的最大值！</b>":""}`;
+    draw(); return true;
+  }
+  function stop(){ if(timer){ clearInterval(timer); timer=null; } $("#f-play").textContent="▶ 自動播放"; }
+  $("#f-step").onclick=()=>{ stop(); step(); };
+  $("#f-play").onclick=()=>{ if(timer){ stop(); return; } $("#f-play").textContent="⏸ 暫停"; timer=setInterval(()=>{ if(step()===false) stop(); },700); };
+  $("#f-reset").onclick=()=>{ parse(); $("#f-msg").textContent="按「下一個事件」開始掃描"; };
+  $("#f-in").oninput=()=>{ parse(); $("#f-msg").textContent="按「下一個事件」開始掃描"; };
+  $$("[data-fs]").forEach(b=>b.onclick=()=>{ $("#f-in").value=b.dataset.fs; parse(); $("#f-msg").textContent="按「下一個事件」開始掃描"; });
+  $("#f-rand").onclick=()=>{ const n=6+Math.floor(Math.random()*5); const a=[]; for(let i=0;i<n;i++){ const s=1+Math.floor(Math.random()*20); a.push(s, s+1+Math.floor(Math.random()*8)); } $("#f-in").value=a.join(" "); parse(); $("#f-msg").textContent="按「下一個事件」開始掃描"; };
+  parse(); $("#f-msg").textContent="按「下一個事件」開始掃描";
+})();
+
+/* ================= G demo ================= */
+(function(){
+  function render(){
+    let s=$("#g-in").value.replace(/\D/g,"").replace(/^0+(?=\d)/,"");
+    if(!s){ $("#g-digits").textContent=""; $("#g-chips").innerHTML=""; $("#g-expr").textContent="請輸入數字"; return; }
+    const groups=[]; for(let e=s.length;e>0;e-=3) groups.push(s.slice(Math.max(0,e-3),e)); // groups[0] rightmost
+    // colored digits left->right
+    let html=""; for(let gi=groups.length-1;gi>=0;gi--){ html+=`<span class="g${gi%2}">${groups[gi]}</span>${gi?"<span style='color:var(--faint)'>,</span>":""}`; }
+    $("#g-digits").innerHTML=html;
+    let sum=0, run=[];
+    const chips = groups.slice(0,40).map((g,i)=>{ const v=parseInt(g,10); const sg=i%2===0?1:-1; sum+=0; return `<span class="chip ${sg>0?"plus":"minus"}">${sg>0?"+":"−"}${v}<sub>第${i+1}組</sub></span>`; });
+    groups.forEach((g,i)=>{ sum += (i%2===0?1:-1)*parseInt(g,10); });
+    $("#g-chips").innerHTML=chips.join("")+(groups.length>40?`<span style="color:var(--faint)">…共 ${groups.length} 組</span>`:"");
+    const parts=groups.slice(0,12).map((g,i)=>(i===0?"":(i%2?" − ":" + "))+parseInt(g,10));
+    $("#g-expr").textContent=parts.join("")+(groups.length>12?" …":"")+" = "+sum;
+    const yes = sum%13===0;
+    $("#g-sum").textContent=sum; $("#g-abs").textContent=Math.abs(sum);
+    $("#g-yn").innerHTML= yes?"<span class=yes>YES</span>":"<span class=no>NO</span>";
+    let big; try{ big = BigInt(s)%13n; }catch(e){ big=null; }
+    $("#g-chk").innerHTML = big===null? "-" : `n % 13 = ${big} ${ (big===0n)===yes ? "<span class=yes>一致 ✓</span>":"<span class=no>不一致</span>" }`;
+    $("#g-out").textContent=`${Math.abs(sum)} ${yes?"YES":"NO"}`;
+  }
+  $("#g-in").oninput=render;
+  $$("[data-gs]").forEach(b=>b.onclick=()=>{ $("#g-in").value=b.dataset.gs; render(); });
+  const rdig=n=>{ let s=String(1+Math.floor(Math.random()*9)); for(let i=1;i<n;i++) s+=Math.floor(Math.random()*10); return s; };
+  $("#g-r13").onclick=()=>{ $("#g-in").value=(BigInt(rdig(10+Math.floor(Math.random()*25)))*13n).toString(); render(); };
+  $("#g-rnd").onclick=()=>{ $("#g-in").value=rdig(8+Math.floor(Math.random()*30)); render(); };
+  render();
+})();
+
+route();
+</script>
+</body>
+</html>

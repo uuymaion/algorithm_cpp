@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+
+# 編譯出來的執行檔（VS Code 會在 .cpp 旁邊產生同名、沒有副檔名的檔案）
+algo*_*
+!algo*_*.cpp
+!algo*_*.pdf
+*.out
+*.exe
+*.o
+*.dSYM/
