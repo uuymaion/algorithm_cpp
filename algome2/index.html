@@ -60,6 +60,8 @@ ul.clean li{margin:3px 0}
 .tabs button:hover{color:var(--text)}
 .tabs button.on{color:var(--text);border-bottom-color:var(--acc)}
 .pane{display:none}.pane.on{display:block}
+a.pill.pdf{text-decoration:none;color:var(--cyan);border-color:#25475a}
+a.pill.pdf:hover{background:#1a2b36}
 details.spoil{background:var(--panel);border:1px dashed var(--line2);border-radius:10px;padding:12px 16px}
 details.spoil summary{cursor:pointer;color:var(--warn);font-weight:500}
 pre.io{background:#0b0d12;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:6px 0;font-family:var(--mono);font-size:13px;line-height:1.5;overflow:auto;white-space:pre}
@@ -186,6 +188,7 @@ tr.found td{color:var(--ok);font-weight:600}
     <li><a href="#prob-g" data-v="prob-g"><span class="letter">G</span>Counterfeit Money<span class="tag">大數</span></a></li>
     <li class="navsep"></li>
     <li><a href="#cheatsheet" data-v="cheatsheet"><span class="letter">⌘</span>考前速查表<span class="tag"></span></a></li>
+    <li><a href="../algome1/"><span class="letter">←</span>Midterm 1 教學<span class="tag"></span></a></li>
     <li><a href="https://github.com/uuymaion/algorithm_cpp/tree/main/algome2" target="_blank" rel="noopener"><span class="letter">⎇</span>GitHub 原始碼<span class="tag"></span></a></li>
   </ul>
 </nav>
@@ -215,7 +218,7 @@ tr.found td{color:var(--ok);font-weight:600}
 
 <!-- ============ A ============ -->
 <section class="view" id="v-prob-a">
-  <span class="pill acc">Problem A</span><span class="pill">模擬</span><span class="pill ok">你的程式：範例通過</span>
+  <span class="pill acc">Problem A</span><a class="pill pdf" href="algome2_a_Quarantine_Policy.pdf" target="_blank" rel="noopener">📄 題目 PDF</a><span class="pill">模擬</span><span class="pill ok">你的程式：範例通過</span>
   <h1>Quarantine Policy（隔離政策）</h1>
   <p class="sub">飛機座位圖上有確診者 V，周圍 8 格要隔離：上下左右 d1 天、斜對角 d2 天，多個來源取最大值不累加</p>
   <div class="tabs" data-for="a"></div>
@@ -306,7 +309,7 @@ for (int k = 0; k &lt; 8; k++) {
 
 <!-- ============ B ============ -->
 <section class="view" id="v-prob-b">
-  <span class="pill acc">Problem B</span><span class="pill">回溯 Backtracking</span><span class="pill ok">你的程式：範例通過</span>
+  <span class="pill acc">Problem B</span><a class="pill pdf" href="algome2_b_Bidirectional_Number_Ring.pdf" target="_blank" rel="noopener">📄 題目 PDF</a><span class="pill">回溯 Backtracking</span><span class="pill ok">你的程式：範例通過</span>
   <h1>Bidirectional Number Ring（質數環）</h1>
   <p class="sub">把 1~N 放進 N 個圍成一圈的圓，相鄰兩數的和都要是質數，第一格固定是 1，輸出全部排法</p>
   <div class="tabs" data-for="b"></div>
@@ -405,7 +408,7 @@ Case 2:
 
 <!-- ============ C ============ -->
 <section class="view" id="v-prob-c">
-  <span class="pill acc">Problem C</span><span class="pill">計數 + 質數判斷</span><span class="pill ok">你的程式：範例通過</span>
+  <span class="pill acc">Problem C</span><a class="pill pdf" href="algome2_c_Counting_the_Primes.pdf" target="_blank" rel="noopener">📄 題目 PDF</a><span class="pill">計數 + 質數判斷</span><span class="pill ok">你的程式：範例通過</span>
   <h1>Counting the Primes</h1>
   <p class="sub">數每個字元出現幾次，把「出現次數是質數」的字元按 ASCII 由小到大印出來</p>
   <div class="tabs" data-for="c"></div>
@@ -470,7 +473,7 @@ Case 3: empty</pre></div>
 
 <!-- ============ D ============ -->
 <section class="view" id="v-prob-d">
-  <span class="pill acc">Problem D</span><span class="pill">埃氏篩法 + 奇偶性</span><span class="pill ok">你的程式：範例通過</span>
+  <span class="pill acc">Problem D</span><a class="pill pdf" href="algome2_d_Goldbach_and_Euler.pdf" target="_blank" rel="noopener">📄 題目 PDF</a><span class="pill">埃氏篩法 + 奇偶性</span><span class="pill ok">你的程式：範例通過</span>
   <h1>Goldbach and Euler</h1>
   <p class="sub">判斷 n 能不能寫成兩個<b>不同</b>質數的和，可以的話要讓兩數差最小；n 最大 10⁸、最多 10 萬筆</p>
   <div class="tabs" data-for="d"></div>
@@ -540,7 +543,7 @@ Case 3: empty</pre></div>
 
 <!-- ============ E ============ -->
 <section class="view" id="v-prob-e">
-  <span class="pill acc">Problem E</span><span class="pill">動態規劃 DP</span><span class="pill warn">還沒寫 · 參考解已收起</span>
+  <span class="pill acc">Problem E</span><a class="pill pdf" href="algome2_e_Falling_in_Love.pdf" target="_blank" rel="noopener">📄 題目 PDF</a><span class="pill">動態規劃 DP</span><span class="pill warn">還沒寫 · 參考解已收起</span>
   <h1>Falling in Love（格子路徑計數）</h1>
   <p class="sub">從棋盤左上角走到右下角，只能往右、往下，有些十字路口很危險不能走，問有幾種走法（mod 10⁹+7）</p>
   <div class="tabs" data-for="e"></div>
@@ -624,7 +627,7 @@ while (ss &gt;&gt; col) bad[row][col] = true;</pre>
 
 <!-- ============ F ============ -->
 <section class="view" id="v-prob-f">
-  <span class="pill acc">Problem F</span><span class="pill">掃描線 Sweep Line</span><span class="pill ok">你的程式：範例通過</span>
+  <span class="pill acc">Problem F</span><a class="pill pdf" href="algome2_f_Equipments_of_Kitchen.pdf" target="_blank" rel="noopener">📄 題目 PDF</a><span class="pill">掃描線 Sweep Line</span><span class="pill ok">你的程式：範例通過</span>
   <h1>Equipments of Kitchen（廚具租借）</h1>
   <p class="sub">n 筆租借時段 [s, d)，同一時間最多有幾筆在用 → 就是至少要準備幾套設備</p>
   <div class="tabs" data-for="f"></div>
@@ -689,7 +692,7 @@ while (ss &gt;&gt; col) bad[row][col] = true;</pre>
 
 <!-- ============ G ============ -->
 <section class="view" id="v-prob-g">
-  <span class="pill acc">Problem G</span><span class="pill">字串大數 + 同餘</span><span class="pill ok">你的程式：範例通過</span>
+  <span class="pill acc">Problem G</span><a class="pill pdf" href="algome2_g_Counterfeit_Money.pdf" target="_blank" rel="noopener">📄 題目 PDF</a><span class="pill">字串大數 + 同餘</span><span class="pill ok">你的程式：範例通過</span>
   <h1>Counterfeit Money（偽鈔檢查）</h1>
   <p class="sub">最多 1000 位數的序號，從右邊每 3 位一組，交錯加減，結果能被 13 整除就是真鈔</p>
   <div class="tabs" data-for="g"></div>
