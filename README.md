@@ -8,7 +8,7 @@
 |---|---|---|
 | `algome1/` | [algome1 互動教學](https://uuymaion.github.io/algorithm_cpp/algome1/) | ✅ 已完成 |
 | `algome2/` | [algome2 互動教學](https://uuymaion.github.io/algorithm_cpp/algome2/) | ✅ 已完成 |
-| `algofe/` | 製作中 | 等題目 PDF |
+| `algofe/` | [algofe 互動教學](https://uuymaion.github.io/algorithm_cpp/algofe/) | ✅ 已完成 |
 | `algope1/`、`algope2/` | 不做網頁 | - |
 
 每個網頁都有：題目重點、互動演示、解法拆解、程式碼逐行解說、小測驗
@@ -19,7 +19,7 @@
 algorithm_cpp/
 ├── algome1/     algome1_*.cpp、題目 PDF、index.html（互動教學網站）
 ├── algome2/     algome2_*.cpp、題目 PDF、index.html（互動教學網站）
-├── algofe/      algofe_*.cpp
+├── algofe/      algofe_*.cpp、題目 PDF、index.html（互動教學網站）
 ├── algope1/     algope1_*.cpp
 ├── algope2/     algope2_*.cpp
 └── ppt/         課堂投影片 Chapter 0 ~ 5
@@ -53,15 +53,16 @@ algorithm_cpp/
 
 ### algofe
 
-| 題 | 學習主題 | 狀態 |
-|---|---|---|
-| A | 3n+1（Collatz）+ 記憶化 | ✅ |
-| B | 字串大數、3 位一組處理 | ⬜ 還沒寫完 |
-| C | 遞迴 + 記憶化（費氏數列型 DP） | ✅ |
-| D | 取餘數找規律、輸出格式 | ✅ |
-| E | Merge Sort | ⬜ 還沒寫完 |
-| F | 排序 + 中位數（距離總和最小） | ✅ |
-| H | 二維陣列模擬、8 方向鄰居（同 algome2 A） | ✅ |
+| 題 | 題目 | 學習主題 | 狀態 |
+|---|---|---|---|
+| A | 3n + 1 | Collatz 模擬、記憶化（同 algome1 G） | ✅ |
+| B | Counterfeit Money | 字串大數、同餘（同 algome2 G） | ⬜ 還沒寫完 |
+| C | Great Wall | DP、費氏數列、記憶化遞迴 | ✅ |
+| D | Hello World! | 取餘數、if 判斷順序、輸出格式 | ✅ |
+| E | Merge Sort | 分治、Merge Sort（同 algome1 A） | ⬜ 還沒寫完 |
+| F | Oil Pipeline | 排序、中位數（距離總和最小） | ✅（井數為偶數時答案會錯，見網頁說明） |
+| G | Propagation Route | Prim 演算法變形、貪婪 | ⬜ 還沒寫 |
+| H | Quarantine Policy | 二維陣列模擬、8 方向鄰居（同 algome2 A） | ✅ |
 
 ### algope1
 
