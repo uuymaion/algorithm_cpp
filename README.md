@@ -35,7 +35,7 @@ algorithm_cpp/
 | B | Bidirectional Number Ring | 回溯（Backtracking）、剪枝、奇偶性、質數表 | ✅ |
 | C | Counting the Primes | 計數陣列（ASCII 當下標）、質數判斷 | ✅ |
 | D | Goldbach and Euler | 埃氏篩法（Sieve of Eratosthenes）、bitset | ✅ |
-| E | Falling in Love | 格子路徑 DP、一維滾動陣列、getline + stringstream | ⬜ 還沒寫 |
+| E | Falling in Love | 格子路徑 DP、記憶化遞迴、getline + stringstream | ✅ |
 | F | Equipments of Kitchen | 掃描線（Sweep Line）、排序 | ✅ |
 | G | Counterfeit Money | 字串大數、同餘（1001 = 7×11×13） | ✅ |
 

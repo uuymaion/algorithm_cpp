@@ -200,7 +200,7 @@ tr.found td{color:var(--ok);font-weight:600}
   <h1>演算法 Midterm 2 程式題互動教學</h1>
   <p class="sub">七題，每題都有：題目重點、互動演示、解法拆解、你寫的程式碼（逐行解說）、小測驗。點左邊的題目開始</p>
 
-  <div class="note ok"><b>先講結論：</b>你寫好的 6 份程式（A、B、C、D、F、G）我都編譯起來，用題目給的範例測資跑過，<b>輸出全部正確</b>。E 題（Falling in Love）你還沒寫，E 頁面的參考解<b>預設收起來</b>，想自己先寫就先不要點開</div>
+  <div class="note ok"><b>先講結論：</b>7 份程式（A~G）我都編譯起來，用題目給的範例測資跑過，<b>輸出全部正確</b>。E 題（Falling in Love）是後來補寫的，另外跟參考解對拍了 300 組隨機測資，也測了最大 3999×3999，全部一致</div>
 
   <h2>題目一覽</h2>
   <div class="grid2" id="ovcards"></div>
@@ -544,7 +544,7 @@ Case 3: empty</pre></div>
 
 <!-- ============ E ============ -->
 <section class="view" id="v-prob-e">
-  <span class="pill acc">Problem E</span><a class="pill pdf" href="algome2_e_Falling_in_Love.pdf" target="_blank" rel="noopener">📄 題目 PDF</a><span class="pill">動態規劃 DP</span><span class="pill warn">還沒寫 · 參考解已收起</span>
+  <span class="pill acc">Problem E</span><a class="pill pdf" href="algome2_e_Falling_in_Love.pdf" target="_blank" rel="noopener">📄 題目 PDF</a><span class="pill">動態規劃 DP</span><span class="pill ok">你的程式：範例通過</span>
   <h1>Falling in Love（格子路徑計數）</h1>
   <p class="sub">從棋盤左上角走到右下角，只能往右、往下，有些十字路口很危險不能走，問有幾種走法（mod 10⁹+7）</p>
   <div class="tabs" data-for="e"></div>
@@ -612,16 +612,22 @@ dp[i][j] = dp[i-1][j] + dp[i][j-1]   (mod 1e9+7)   其他情況
 stringstream ss(line);
 ss &gt;&gt; row;
 while (ss &gt;&gt; col) bad[row][col] = true;</pre>
-    <div class="note warn">混用 <code>cin &gt;&gt;</code> 和 <code>getline</code> 時要小心：<code>cin &gt;&gt; W &gt;&gt; N</code> 之後換行字元還留在緩衝區，下一次 getline 會讀到空字串。參考解是全部都用 getline 讀，就沒這個問題</div>
+    <div class="note warn">混用 <code>cin &gt;&gt;</code> 和 <code>getline</code> 時要小心：<code>cin &gt;&gt; W &gt;&gt; N</code> 之後換行字元還留在緩衝區，下一次 getline 會讀到空字串。解法有兩種：你的寫法是 <code>cin &gt;&gt;</code> 之後接一個 <code>cin.ignore()</code> 把換行吃掉；參考解則是全部都用 getline 讀</div>
 
     <h3>這題跟課本的關係</h3>
     <p>這就是 Chapter 3 動態規劃裡最基本的「格子路徑」問題。沒有障礙時答案是組合數 C(W+N−2, W−1)，有障礙就只能 DP</p>
   </div>
 
   <div class="pane" data-p="e-4">
-    <h2>參考解 <span class="pill warn">我補的，不是你寫的</span></h2>
-    <p style="color:var(--dim)">這題你還沒寫，建議先看「解法拆解」自己寫完，再點開對照。參考解用題目兩組範例測過，輸出 4 和 0</p>
-    <details class="spoil"><summary>我寫完了／我想看參考解（點開）</summary><div class="codewrap" data-code="E" style="margin-top:12px"></div></details>
+    <h2>你的程式碼 <span class="pill">algome2_e.cpp</span></h2>
+    <div class="note ok">範例輸出 4、0 正確；跟參考解對拍 300 組隨機小測資全部一致；最大 3999×3999 約 0.44 秒，答案也一致</div>
+    <div class="codewrap" data-code="E"></div>
+    <h3>跟參考解比較：遞迴（top-down）vs 迴圈（bottom-up）</h3>
+    <div class="grid2">
+      <div class="card"><h3 style="margin-top:0">你的寫法：遞迴 + 記憶化</h3><ul class="clean"><li>從終點往回問：「走到這裡有幾種？」→ 問上面和左邊</li><li>用 <code>done</code> 記算過的格子，每格只算一次</li><li>直覺、好寫，跟遞迴式一模一樣</li><li>遞迴最深約 W+N 層，呼叫函式有額外成本，實測比迴圈慢約 4 倍</li></ul></div>
+      <div class="card"><h3 style="margin-top:0">參考解：兩層 for + 一維陣列</h3><ul class="clean"><li>從起點往右下一格一格填，算到某格時上面和左邊一定已經算好</li><li>不用遞迴、不用 done 陣列</li><li>只留一列 <code>dp[j]</code>，記憶體從 O(W·N) 降到 O(N)</li><li>要先想清楚填表順序</li></ul></div>
+    </div>
+    <details class="spoil" style="margin-top:12px"><summary>打開參考解對照</summary><div class="codewrap" data-code="ER" style="margin-top:12px"></div></details>
   </div>
   <div class="pane" data-p="e-5"><h2>小測驗</h2><div data-quiz="E"></div></div>
 </section>
@@ -1001,7 +1007,7 @@ signed main(){
     }
     return 0;
 }</script>
-<script type="text/plain" id="src-E">#include <iostream>
+<script type="text/plain" id="src-ER">#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -1038,6 +1044,55 @@ int main(){
         cout << dp[N] << "\n";
     }
     return 0;
+}</script>
+<script type="text/plain" id="src-E">#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <sstream>
+using namespace std;
+#define int long long
+vector<vector<int>> arr;
+vector<vector<int>> done;
+int w, n;
+int dp(int x, int y){
+    if(done[x][y]) return arr[x][y];
+    if(x>0) {
+        arr[x][y] += dp(x-1, y);
+        arr[x][y] %= 1000000007;
+    }
+    if(y>0) {
+        arr[x][y] += dp(x, y-1);
+        arr[x][y] %= 1000000007;
+    }
+    done[x][y] = 1;
+    return arr[x][y];
+}
+signed main(){
+    int how;
+    cin >> how;
+    while(how--){
+        cin >> w >> n;
+        arr.assign(w, vector<int>(n, 0));
+        done.assign(w, vector<int>(n, 0));
+        cin.ignore();
+        string line;
+        for(int i=0;i<w;i++){
+            getline(cin, line);
+            stringstream ss(line);
+            int v;
+            ss >> v;
+            while(ss >> v){
+                done[i][v-1] = 1;
+            }
+        }
+        if(done[0][0] == 0){
+            arr[0][0] = 1;
+            cout << dp(w-1, n-1);
+        }else cout << 0;
+        cout << endl;
+
+    }
 }</script>
 <script type="text/plain" id="src-F">#include <iostream>
 #include <algorithm>
@@ -1165,6 +1220,18 @@ D: [
  [48,49,"輸出。注意第一種用 <code>\\n</code>、第二種用 <code>endl</code>。10 萬行用 endl 每次 flush 會比較慢；建議全部改 <code>\\n</code>，並在 main 開頭加 <code>ios::sync_with_stdio(false); cin.tie(nullptr);</code>"],
 ],
 E: [
+ [7,"<code>#define int long long</code>：dp 值在 mod 之前會相加，用 long long 不會溢位"],
+ [8,9,"<code>arr[x][y]</code> 存走到 (x, y) 的走法數；<code>done[x][y]</code> 記「這格的答案已經確定」。<br><br>這個設計很漂亮：危險路口也標成 done，而它的 arr 是 0，所以之後問到它就會直接回傳 0，不用另外寫判斷。<br><br>小建議：<code>done</code> 只存 0／1，改成 <code>vector&lt;vector&lt;char&gt;&gt;</code> 可以省下約 112MB（4000×4000 時）"],
+ [11,12,"<code>dp(x, y)</code> = 走到 (x, y) 有幾種走法。已經確定的格子（算過的、危險的）直接回傳"],
+ [13,16,"從<b>上面</b> (x−1, y) 走下來的走法數。<code>x&gt;0</code> 確保第一列不會越界，加完立刻 mod"],
+ [17,20,"從<b>左邊</b> (x, y−1) 走過來的走法數，同樣先檢查邊界、加完 mod"],
+ [21,22,"<b>算完一定要標記 done</b>，這就是記憶化。少了這行，同一格會被問很多次、每次都重算，格子一大就會跑不完"],
+ [28,30,"每筆測資重新開陣列，舊資料會被清掉"],
+ [31,"<code>cin &gt;&gt; w &gt;&gt; n</code> 之後換行字元還留在緩衝區，先 <code>ignore</code> 掉，下面的 getline 才會讀到正確的那一行"],
+ [33,41,"每條東西向道路讀一整行：第一個數字是道路編號（第 37 行先讀掉），後面不定個數的數字是危險路口，標成 done。<br><br>小提醒：這裡用迴圈的 <code>i</code> 當列號，假設測資的道路是照 1、2、3… 的順序給。改用第 37 行讀到的編號會更保險"],
+ [42,45,"起點沒危險：起點的走法數設成 1，然後從終點開始遞迴。<br>起點危險：沒有任何走法，直接印 0。<br><br>dp(0, 0) 時兩個 if 都不成立，會直接回傳 arr[0][0] = 1，所以起點不用先標 done"],
+],
+ER: [
  [6,"答案要 mod 10⁹+7"],
  [9,12,"<b>全部用 getline 讀</b>：第一行是 T。不混用 <code>cin &gt;&gt;</code>，就不會有換行殘留的問題"],
  [14,18,"讀 W N。中間的 while 是保險：如果測資有空白行就跳過"],
@@ -1254,7 +1321,7 @@ $$(".tabs").forEach(t=>{
   const k = t.dataset.for;
   TABNAMES.forEach((name,i)=>{
     const b=document.createElement("button");
-    b.textContent = (k==="e" && i===3) ? "參考解" : name;
+    b.textContent = name;
     b.onclick=()=>{ t.querySelectorAll("button").forEach(x=>x.classList.remove("on")); b.classList.add("on");
       t.parentElement.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on", p.dataset.p===k+"-"+(i+1))); };
     t.appendChild(b);
@@ -1268,7 +1335,7 @@ const OV = [
  ["B","prob-b","Bidirectional Number Ring","回溯 · 剪枝 · 奇偶性","1~N 排成環，相鄰和為質數，列出所有解","範例通過"],
  ["C","prob-c","Counting the Primes","計數陣列 · 質數判斷","次數是質數的字元按 ASCII 輸出","範例通過"],
  ["D","prob-d","Goldbach and Euler","埃氏篩法 · bitset","n 拆成兩個不同質數之和，差最小","範例通過"],
- ["E","prob-e","Falling in Love","格子路徑 DP","只能右、下走，避開危險路口的走法數","還沒寫"],
+ ["E","prob-e","Falling in Love","格子路徑 DP","只能右、下走，避開危險路口的走法數","範例通過"],
  ["F","prob-f","Equipments of Kitchen","掃描線 · 排序","最多同時幾筆租借 = 最少設備數","範例通過"],
  ["G","prob-g","Counterfeit Money","字串大數 · 同餘","3 位一組交錯加減判斷 13 的倍數","範例通過"],
 ];
@@ -1338,7 +1405,7 @@ function buildCode(key){
   host.append(codeEl, ex);
   show(-1);
 }
-["A","B","C","D","E","F","G"].forEach(buildCode);
+["A","B","C","D","E","ER","F","G"].forEach(buildCode);
 
 /* ================= quizzes ================= */
 $$("[data-quiz]").forEach(host=>{
