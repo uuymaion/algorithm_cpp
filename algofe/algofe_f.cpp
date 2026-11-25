@@ -1,5 +1,7 @@
 // 中位數
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 #define int long long
 
@@ -33,7 +35,7 @@ signed main(){
             two = n/2-1;
             int onef = findmid(one);
             int twof = findmid(two);
-            if(onef>two){
+            if(onef>twof){
                 ansid = one;
                 ans = onef;
             }else{
