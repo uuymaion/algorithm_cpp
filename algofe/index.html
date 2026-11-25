@@ -206,8 +206,7 @@ main{min-width:0}
 
   <div class="note ok"><b>檢查結果：</b>我用 PDF 範例跑過你寫完的 5 份程式
     <ul class="clean">
-      <li><b>A、C、D、H</b>：範例全對</li>
-      <li><b>F（Oil Pipeline）</b>：範例會過，但<b>井的數量是偶數時答案會錯</b>。原因和修法寫在 F 的頁面，程式沒改</li>
+      <li><b>A、C、D、F、H</b>：範例全對。F（Oil Pipeline）原本井數為偶數時會錯，你後來修好了，另外用 500 組隨機測資驗證過</li>
       <li><b>B、E</b>：還沒寫完，原樣保留。這兩題你在 Midterm 2 G、Midterm 1 A 已經寫過一樣的題目，頁面上有連結可以對照</li>
       <li><b>G</b>：還沒寫，參考解預設收起來</li>
     </ul>
@@ -496,7 +495,7 @@ else                 k = 3;</pre>
 
 <!-- ============ F ============ -->
 <section class="view" id="v-prob-f">
-  <span class="pill acc">algofe F</span><span class="pill">中位數</span><span class="pill ok">範例通過</span><span class="pill warn">偶數個時會錯</span><a class="pill pdf" href="algofe_f_Oil_Pipeline.pdf" target="_blank" rel="noopener">📄 題目 PDF</a>
+  <span class="pill acc">algofe F</span><span class="pill">中位數</span><span class="pill ok">你的程式：已修正，全部通過</span><a class="pill pdf" href="algofe_f_Oil_Pipeline.pdf" target="_blank" rel="noopener">📄 題目 PDF</a>
   <h1>Oil Pipeline（輸油管）</h1>
   <p class="sub">一條東西向的主管線 y = w，每口井往南或往北接到主管線，選 w 讓支管總長最小</p>
   <div class="tabs" data-for="f"></div>
@@ -547,11 +546,13 @@ else                 k = 3;</pre>
 N 偶數：y[N/2−1] 到 y[N/2] 之間的任何 w 總長都一樣
         → 題目要最小的 → y[N/2−1]
 合起來：w = y[(N−1)/2]</div>
-    <h3>你的程式在偶數時的問題</h3>
-    <p>第 36 行 <code>if(onef&gt;two)</code>：本來應該比較兩個總長 <code>onef</code> 和 <code>twof</code>，但打成了 <code>two</code>（那是 index）。總長一定比 index 大，所以每次都選 <code>one</code>（上面那個中位數）。可是偶數時兩邊總長一樣，題目要的是比較小的那個</p>
-    <div class="mathbox">y = 1 3       正確：1 2     你的：3 2
-y = 1 2 10 20 正確：2 27    你的：10 27</div>
-    <p>修法最簡單的是直接用 <code>ansid = (n - 1) / 2</code>，不用分奇偶。或是保留原本的結構，把第 36 行改成 <code>if (onef &lt; twof)</code>，相等時就會走 else 選到比較小的 <code>two</code></p>
+    <h3>你修掉的 bug</h3>
+    <p>原本的比較寫成 <code>if(onef&gt;two)</code>，拿「總長」去跟「index」比，總長幾乎一定比較大，所以每次都選到比較大的中位數。偶數時兩邊總長一樣，題目要的是比較小的那個，於是答案錯了：</p>
+    <div class="mathbox">              正確      修正前    修正後
+y = 1 3       1 2       3 2       1 2  ✓
+y = 1 2 10 20 2 27      10 27     2 27 ✓</div>
+    <p>現在改成 <code>if(onef&gt;twof)</code>，比較的是兩個總長。因為兩個中位數的總長一定相等，條件永遠不成立，一定走 else 選到 <code>two</code>，答案就對了</p>
+    <div class="note">小提醒：<code>onef &gt; twof</code> 的意思是「one 比較差」，這時候選 one 其實是反過來的。這題因為兩邊一定相等所以沒影響，但寫成 <code>if (onef &lt; twof)</code> 選 one、否則選 two，意思會更清楚。更簡單的寫法是直接 <code>ansid = (n - 1) / 2</code>，連 if 都不用</div>
     <div class="note">複雜度：排序 O(N log N)。另外 <code>findmid</code> 每次 O(N)，最多呼叫 2 次，沒問題</div>
   </div>
   <div class="pane" data-p="f-4"><h2>你的程式碼 <span class="pill">algofe_f.cpp</span></h2><div class="codewrap" data-code="F"></div></div>
@@ -740,7 +741,7 @@ for (auto v : y) s += abs(v - w);</pre></div>
     <div class="card"><h3>容易踩的坑</h3><ul class="clean">
       <li><code>vector&lt;int&gt; list;</code> + <code>bits/stdc++.h</code> → 跟 std::list 撞名，編譯失敗（E）</li>
       <li><code>stoll()</code> 只吃字串，單一字元用 <code>c - '0'</code>（B）</li>
-      <li>比較寫錯變數：<code>onef &gt; two</code>（F）</li>
+      <li>比較時打錯變數：F 原本把 <code>twof</code> 打成 <code>two</code>，編譯會過但答案錯，最難抓</li>
       <li>0 也是偶數（D）</li>
     </ul></div>
   </div>
@@ -888,7 +889,9 @@ int main(){
     }
 }</script>
 <script type="text/plain" id="src-F">// 中位數
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 #define int long long
 
@@ -922,7 +925,7 @@ signed main(){
             two = n/2-1;
             int onef = findmid(one);
             int twof = findmid(two);
-            if(onef>two){
+            if(onef>twof){
                 ansid = one;
                 ans = onef;
             }else{
@@ -1089,15 +1092,15 @@ E: [
 ],
 F: [
  [1,"你的註解：中位數。方向完全正確"],
- [6,7,"<code>n</code> 井的數量、<code>arr</code> 存 y 座標"],
- [8,15,"<code>findmid(i)</code>：主管線放在 arr[i] 時的總長。注意參數叫 <code>i</code>，迴圈變數也叫 <code>i</code>，迴圈裡的 i 會遮住參數，不過因為第 9 行已經先把 arr[i] 存進 numb，所以沒出錯"],
- [17,"讀到 0 結束"],
- [20,22,"讀座標，x 讀進 <code>x</code> 丟掉，只存 y。主管線是東西向，x 跟答案無關，這個觀察是對的"],
- [23,"排序後，中位數就在中間"],
- [27,30,"N 奇數：中位數只有一個 arr[n/2]，正確"],
- [31,35,"N 偶數：兩個中位數 arr[n/2] 和 arr[n/2−1]，各算一次總長。其實這兩個總長一定相等（兩個中位數之間任何位置總長都一樣）"],
- [36,"⚠ <b>Bug 在這裡</b>：<code>onef &gt; two</code> 比的是「總長」和「index」，應該是 <code>twof</code>。總長幾乎一定大於 index，所以每次都選 <code>one</code>（比較大的中位數）。<br><br>但題目要「有多個解輸出最小的」，偶數時應該選 <code>two</code> = arr[n/2−1]。<br>例：y = 1 3，正確 <code>1 2</code>，你輸出 <code>3 2</code>。<br><br>修法：改成 <code>if (onef &lt; twof)</code>，相等會走 else 選 two；或直接 <code>ansid = (n-1)/2</code>"],
- [45,"輸出位置和總長"],
+ [8,9,"<code>n</code> 井的數量、<code>arr</code> 存 y 座標"],
+ [10,17,"<code>findmid(i)</code>：主管線放在 arr[i] 時的總長。注意參數叫 <code>i</code>，迴圈變數也叫 <code>i</code>，迴圈裡的 i 會遮住參數，不過因為第 11 行已經先把 arr[i] 存進 numb，所以沒出錯"],
+ [19,"讀到 0 結束"],
+ [20,24,"讀座標，x 讀進 <code>x</code> 丟掉，只存 y。主管線是東西向，x 跟答案無關"],
+ [25,"排序後，中位數就在中間"],
+ [29,32,"N 奇數：中位數只有一個 arr[n/2]"],
+ [33,37,"N 偶數：兩個中位數 arr[n/2] 和 arr[n/2−1]，各算一次總長。這兩個總長一定相等，兩個中位數之間任何位置總長都一樣"],
+ [38,44,"<b>這裡是你修正的地方</b>：原本寫成 <code>onef &gt; two</code>（拿總長跟 index 比），現在改成 <code>onef &gt; twof</code>。<br><br>因為兩個總長一定相等，條件永遠不成立，一定走 else 選 <code>two</code> = 比較小的中位數，符合題目「有多個解輸出最小的」。<br><br>小提醒：<code>onef &gt; twof</code> 代表 one 比較差，這時候選 one 其實是反的。這題剛好沒影響，寫成 <code>onef &lt; twof</code> 選 one 會比較合理；或直接 <code>ansid = (n-1)/2</code>"],
+ [47,"輸出位置和總長"],
 ],
 G: [
  [8,"讀 n m city，<code>0 0 0</code> 結束"],
@@ -1151,7 +1154,7 @@ E:[
 F:[
  {q:"井的 y = 1, 2, 10, 20，最佳的 w（取最小）是？",o:["2","10","6","1"],a:0,w:"偶數個，2 到 10 之間總長都一樣是 27，題目要最小的 → 2"},
  {q:"為什麼 x 座標用不到？",o:["題目寫錯","主管線是水平的，支管只往南北接，長度只跟 y 有關","x 都一樣","x 太大"],a:1,w:"支管長度 = |y − w|，跟 x 無關"},
- {q:"你的程式第 36 行應該怎麼改？",o:["onef > twof","onef < twof","one > two","不用改"],a:1,w:"相等時要選 two（比較小的中位數），onef < twof 相等時會走 else 選 two"},
+ {q:"N 是偶數時，兩個中位數 arr[n/2−1] 和 arr[n/2] 的總長關係是？",o:["一定相等","前面的比較小","後面的比較小","不一定"],a:0,w:"在兩個中位數之間移動，上面和下面的井一樣多，總長不變，所以題目才需要規定「輸出最小的」"},
 ],
 G:[
  {q:"這題的流程最像哪個演算法？",o:["Dijkstra","Prim","Kruskal","BFS"],a:1,w:"從一個點開始，每次挑連到目前集合最好的邊，把另一端加進來，就是 Prim"},
@@ -1202,7 +1205,7 @@ const OV = [
  ["C","prob-c","Great Wall","DP · 費氏數列","2×N 用 2×1 積木鋪滿的方法數","範例通過"],
  ["D","prob-d","Hello World!","取餘數 · 輸出格式","看 N % 7 決定印幾次","範例通過"],
  ["E","prob-e","Merge Sort","分治","同 Midterm 1 A，每次合併後印陣列","還沒寫完"],
- ["F","prob-f","Oil Pipeline","中位數","主管線放哪裡支管總長最短","偶數時有 bug"],
+ ["F","prob-f","Oil Pipeline","中位數","主管線放哪裡支管總長最短","範例通過"],
  ["G","prob-g","Propagation Route","Prim 變形","freq 最高、dis 最短的城市先感染","還沒寫"],
  ["H","prob-h","Quarantine Policy","二維陣列模擬","同 Midterm 2 A","範例通過"],
 ];
@@ -1531,7 +1534,7 @@ function circlePos(V, cx, cy, R){ const p=[null]; for(let i=1;i<=V;i++){ const a
     const fm=i=>arr.reduce((a,v)=>a+Math.abs(v-arr[i]),0);
     let ansid, ans;
     if(n%2){ ansid=Math.floor(n/2); ans=fm(ansid); }
-    else { const one=n/2, two=n/2-1, onef=fm(one), twof=fm(two); if(onef>two){ ansid=one; ans=onef; } else { ansid=two; ans=twof; } }
+    else { const one=n/2, two=n/2-1, onef=fm(one), twof=fm(two); if(onef>twof){ ansid=one; ans=onef; } else { ansid=two; ans=twof; } }
     return [arr[ansid],ans];
   }
   function draw(){

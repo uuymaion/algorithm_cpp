@@ -60,7 +60,7 @@ algorithm_cpp/
 | C | Great Wall | DP、費氏數列、記憶化遞迴 | ✅ |
 | D | Hello World! | 取餘數、if 判斷順序、輸出格式 | ✅ |
 | E | Merge Sort | 分治、Merge Sort（同 algome1 A） | ⬜ 還沒寫完 |
-| F | Oil Pipeline | 排序、中位數（距離總和最小） | ✅（井數為偶數時答案會錯，見網頁說明） |
+| F | Oil Pipeline | 排序、中位數（距離總和最小） | ✅ |
 | G | Propagation Route | Prim 演算法變形、貪婪 | ⬜ 還沒寫 |
 | H | Quarantine Policy | 二維陣列模擬、8 方向鄰居（同 algome2 A） | ✅ |
 
